@@ -1,9 +1,23 @@
-<!doctype html>
+!doctype html>
 <html lang="nl">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Afwegingskader Social Media</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body, #root { min-height: 100%; }
+    body { overflow-x: hidden; -webkit-text-size-adjust: 100%; }
+    button, input { max-width: 100%; font-family: inherit; }
+    table { max-width: 100%; }
+    img { max-width: 100%; }
+    button { -webkit-tap-highlight-color: transparent; }
+    /* Prevent iOS zoom on input focus — keep font-size at 16px */
+    input { font-size: 16px !important; }
+    /* Hidden-but-scrollable mobile nav */
+    .mobile-nav::-webkit-scrollbar { display: none; }
+    .mobile-nav { scrollbar-width: none; }
+  </style>
 </head>
 <body style="margin:0">
   <div id="root"></div>
@@ -11,7 +25,7 @@
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <script type="text/babel">
-const { useState } = React;
+const { useEffect, useState } = React;
 // ─── Design Tokens — professioneel marineblauw/slate palet ───────────────────
 const T = {
 bg: "#f4f6f9",
@@ -45,6 +59,17 @@ rood: "#742a2a",
 roodBg: "#fff5f5",
 roodBorder: "#feb2b2",
 };
+ 
+function useIsMobile() {
+const [isMobile, setIsMobile] = useState(() => window.innerWidth < 768);
+useEffect(() => {
+const update = () => setIsMobile(window.innerWidth < 768);
+update();
+window.addEventListener("resize", update);
+return () => window.removeEventListener("resize", update);
+}, []);
+return isMobile;
+}
  
 // ─── Data — gebaseerd op het afwegingskader ──────────
 const CRITERIA = [
@@ -379,9 +404,10 @@ return (
  
 // ─── Page Header ──────────────────────────────────────────────────────────────
 function PageHeader({ title, sub }) {
+const isMobile = useIsMobile();
 return (
 <div style={{ marginBottom: 28, textAlign: "center" }}>
-<h1 style={{ margin: "0 0 8px", fontSize: 26, fontWeight: 800, color: T.text, fontFamily: "Georgia, serif", letterSpacing: "-0.5px" }}>{title}</h1>
+<h1 style={{ margin: "0 0 8px", fontSize: isMobile ? 22 : 26, fontWeight: 800, color: T.text, fontFamily: "Georgia, serif", letterSpacing: 0, lineHeight: 1.2 }}>{title}</h1>
 {sub && <p style={{ margin: 0, color: T.textMid, fontSize: 14, lineHeight: 1.7 }}>{sub}</p>}
 <div style={{ width: 36, height: 2, background: T.accent, margin: "14px auto 0" }} />
 </div>
@@ -391,6 +417,7 @@ return (
 // ─── WELCOME MODAL ────────────────────────────────────────────────────────────
 function WelcomeModal({ onClose }) {
 const [activeTab, setActiveTab] = useState("over");
+const isMobile = useIsMobile();
 const tabs = [
 { id: "over", label: "Over dit project" },
 { id: "hoe", label: "Hoe werkt de tool?" },
@@ -402,25 +429,27 @@ return (
 position: "fixed", inset: 0, zIndex: 1000,
 background: "rgba(10,20,40,0.65)",
 backdropFilter: "blur(5px)",
-display: "flex", alignItems: "center", justifyContent: "center",
-padding: 24,
+display: "flex", alignItems: isMobile ? "flex-end" : "center", justifyContent: "center",
+padding: isMobile ? 0 : 24,
 fontFamily: "'Segoe UI', 'Helvetica Neue', Arial, sans-serif",
 }}>
 <div style={{
-background: T.bgCard, borderRadius: 6,
+background: T.bgCard,
+borderRadius: isMobile ? "14px 14px 0 0" : 6,
 boxShadow: "0 28px 80px rgba(0,0,0,0.22)",
-width: "100%", maxWidth: 660,
-maxHeight: "90vh",
+width: "100%", maxWidth: isMobile ? "100%" : 660,
+maxHeight: isMobile ? "93dvh" : "90vh",
 display: "flex", flexDirection: "column",
 overflow: "hidden",
 }}>
 {/* Header */}
 <div style={{
 background: T.accent,
-padding: "32px 32px 26px",
+padding: isMobile ? "22px 18px 18px" : "32px 32px 26px",
 textAlign: "center",
 position: "relative",
 overflow: "hidden",
+flexShrink: 0,
 }}>
 <div style={{ position: "absolute", right: -40, top: -40, width: 180, height: 180, borderRadius: "50%", background: "rgba(255,255,255,0.05)", pointerEvents: "none" }} />
 <button onClick={onClose} style={{
@@ -434,7 +463,7 @@ display: "flex", alignItems: "center", justifyContent: "center",
 <div style={{ display: "inline-block", background: "rgba(255,255,255,0.18)", color: T.white, fontSize: 10, fontWeight: 700, letterSpacing: 2, textTransform: "uppercase", padding: "4px 14px", borderRadius: 2, marginBottom: 16 }}>
 Praktische beoordelingstool
 </div>
-<h2 style={{ margin: "0 0 12px", fontSize: 24, fontWeight: 900, color: T.white, fontFamily: "Georgia, serif", lineHeight: 1.2 }}>
+<h2 style={{ margin: "0 0 12px", fontSize: isMobile ? 21 : 24, fontWeight: 900, color: T.white, fontFamily: "Georgia, serif", lineHeight: 1.2 }}>
 Afwegingskader social media<br />voor gemeenten
 </h2>
 <p style={{ margin: "0 auto", fontSize: 14, color: "rgba(255,255,255,0.8)", lineHeight: 1.8, maxWidth: 560 }}>
@@ -444,7 +473,7 @@ Een instrument om nieuwe socialmediakanalen verantwoord te beoordelen op bereik,
 </div>
  
 {/* Stat strip */}
-<div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", borderBottom: `1px solid ${T.border}`, flexShrink: 0 }}>
+<div style={{ display: "grid", gridTemplateColumns: isMobile ? "repeat(2,1fr)" : "repeat(4,1fr)", borderBottom: `1px solid ${T.border}`, flexShrink: 0 }}>
 {[
 { n: "6", label: "Criteria" },
 { n: "30", label: "Max. punten" },
@@ -459,10 +488,10 @@ Een instrument om nieuwe socialmediakanalen verantwoord te beoordelen op bereik,
 </div>
  
 {/* Tabs */}
-<div style={{ display: "flex", borderBottom: `1px solid ${T.border}`, flexShrink: 0, background: T.bgCard }}>
+<div style={{ display: "flex", borderBottom: `1px solid ${T.border}`, flexShrink: 0, background: T.bgCard, overflowX: isMobile ? "auto" : "visible" }}>
 {tabs.map(tab => (
 <button key={tab.id} onClick={() => setActiveTab(tab.id)} style={{
-flex: 1, padding: "11px 8px",
+flex: isMobile ? "0 0 auto" : 1, padding: isMobile ? "11px 12px" : "11px 8px",
 background: activeTab === tab.id ? T.accentBg : "transparent",
 border: "none",
 borderBottom: activeTab === tab.id ? `2px solid ${T.accent}` : "2px solid transparent",
@@ -475,10 +504,10 @@ transition: "all 0.12s",
 </div>
  
 {/* Scrollable content */}
-<div style={{ overflowY: "auto", flex: 1, padding: "22px 28px" }}>
+<div style={{ overflowY: "auto", flex: 1, padding: isMobile ? "14px 14px 4px" : "22px 28px", WebkitOverflowScrolling: "touch" }}>
 {activeTab === "over" && (
 <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-<div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+<div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: 12 }}>
 {[
 { icon: "🎓", title: "Doel van de tool", body: "Dit afwegingskader is ontwikkeld voor gemeenten in Nederland om nieuwe socialmediakanalen door de check te halen. Aan de hand van de uitkomst kan worden gekeken of dit een geschikt kanaal is binnen alle richtlijnen." },
 { icon: "🔬", title: "Onderzoeksaanpak", body: "Gebaseerd op deskresearch, benchmarkanalyse, gesprekken en toetsing aan AVG, Archiefwet en WCAG." },
@@ -527,7 +556,7 @@ De tool begeleidt je stap voor stap door het afwegingskader. Vul de zes criteria
 <p style={{ margin: "0 0 6px", fontSize: 13, color: T.textMid, lineHeight: 1.8, textAlign: "center" }}>
 De zes criteria zijn rechtstreeks ontleend aan de position paper en uitgewerkt op basis van de bevindingen in het rapport.
 </p>
-<div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+<div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: 10 }}>
 {CRITERIA.map(c => (
 <div key={c.id} style={{ background: T.bg, border: `1px solid ${T.border}`, borderTop: `3px solid ${T.accent}`, padding: "14px 16px", textAlign: "center" }}>
 <div style={{ fontFamily: "Georgia, serif", fontWeight: 900, fontSize: 11, color: T.accent, marginBottom: 4, textTransform: "uppercase", letterSpacing: 1 }}>{c.nr}</div>
@@ -541,7 +570,7 @@ De zes criteria zijn rechtstreeks ontleend aan de position paper en uitgewerkt o
 </div>
  
 {/* Footer CTA */}
-<div style={{ borderTop: `1px solid ${T.border}`, padding: "18px 28px", background: T.bg, display: "flex", alignItems: "center", justifyContent: "space-between", flexShrink: 0, gap: 12, flexWrap: "wrap" }}>
+<div style={{ borderTop: `1px solid ${T.border}`, padding: isMobile ? "12px 14px" : "18px 28px", background: T.bg, display: "flex", alignItems: "center", justifyContent: isMobile ? "center" : "space-between", flexShrink: 0, gap: 10, flexDirection: isMobile ? "column" : "row", paddingBottom: isMobile ? "calc(12px + env(safe-area-inset-bottom, 0px))" : undefined }}>
 <div style={{ fontSize: 12, color: T.slateLight, fontStyle: "italic" }}>
 Hilde van Oosten · Beoordelingen worden niet opgeslagen
 </div>
@@ -550,6 +579,7 @@ padding: "12px 28px", background: T.accent, color: T.white,
 border: "none", fontWeight: 700, fontSize: 14, cursor: "pointer",
 borderRadius: 2, fontFamily: "inherit",
 transition: "all 0.15s",
+width: isMobile ? "100%" : "auto",
 }}
 onMouseEnter={e => { e.currentTarget.style.background = T.accentMid; }}
 onMouseLeave={e => { e.currentTarget.style.background = T.accent; }}
@@ -562,21 +592,22 @@ onMouseLeave={e => { e.currentTarget.style.background = T.accent; }}
  
 // ─── HOME ─────────────────────────────────────────────────────────────────────
 function HomePage({ setPage }) {
+const isMobile = useIsMobile();
 return (
 <div>
-<div style={{ background: T.accent, borderRadius: 2, padding: "40px 36px 36px", marginBottom: 24, textAlign: "center", position: "relative", overflow: "hidden" }}>
+<div style={{ background: T.accent, borderRadius: 2, padding: isMobile ? "30px 18px 26px" : "40px 36px 36px", marginBottom: 24, textAlign: "center", position: "relative", overflow: "hidden" }}>
 <div style={{ position: "absolute", right: -60, top: -60, width: 240, height: 240, borderRadius: "50%", background: "rgba(255,255,255,0.05)", pointerEvents: "none" }} />
 <div style={{ position: "relative", zIndex: 1, maxWidth: 560, margin: "0 auto" }}>
 <div style={{ fontSize: 11, color: "rgba(255,255,255,0.65)", letterSpacing: 2, textTransform: "uppercase", marginBottom: 14, fontWeight: 700 }}>
 Gemeentelijke communicatietool
 </div>
-<h1 style={{ margin: "0 0 16px", fontSize: 30, fontWeight: 900, color: T.white, fontFamily: "Georgia, serif", lineHeight: 1.2 }}>
+<h1 style={{ margin: "0 0 16px", fontSize: isMobile ? 26 : 30, fontWeight: 900, color: T.white, fontFamily: "Georgia, serif", lineHeight: 1.2 }}>
 Verantwoord social media<br />gebruik voor gemeenten
 </h1>
 <p style={{ margin: "0 0 28px", fontSize: 15, color: "rgba(255,255,255,0.8)", lineHeight: 1.75 }}>
 Een praktisch instrument om nieuwe socialmediakanalen verantwoord te beoordelen binnen gemeentelijke richtlijnen.
 </p>
-<div style={{ display: "flex", gap: 10, flexWrap: "wrap", justifyContent: "center" }}>
+<div style={{ display: "flex", gap: 10, flexWrap: "wrap", justifyContent: "center", flexDirection: isMobile ? "column" : "row" }}>
 {[
 { label: "Start beoordeling", page: "beoordelen", primary: true },
 { label: "Vergelijk platformen", page: "vergelijk" },
@@ -589,17 +620,18 @@ color: btn.primary ? T.accent : T.white,
 border: `2px solid ${T.white}`,
 fontWeight: 700, fontSize: 13, cursor: "pointer", borderRadius: 2,
 fontFamily: "inherit",
+width: isMobile ? "100%" : "auto",
 }}>{btn.label}</button>
 ))}
 </div>
 </div>
 </div>
  
-<div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 1, background: T.border, marginBottom: 24 }}>
+<div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(3,1fr)", gap: 1, background: T.border, marginBottom: 24 }}>
 {[
-{ n: "6", label: "Beoordelingscriteria", sub: "Uit de position paper Nijmegen" },
+{ n: "6", label: "Beoordelingscriteria", sub: "Zes gelijk gewogen criteria" },
 { n: "30", label: "Max. puntentotaal", sub: "Gelijk gewogen criteria" },
-{ n: "3", label: "Strategische pijlers", sub: "gemeentelijke communicatiestrategie" },
+{ n: "3", label: "Strategische pijlers", sub: "Gemeentelijke communicatiestrategie" },
 ].map(s => (
 <div key={s.label} style={{ background: T.bgCard, padding: "20px 16px", textAlign: "center" }}>
 <div style={{ fontSize: 28, fontWeight: 900, color: T.accent, fontFamily: "Georgia, serif" }}>{s.n}</div>
@@ -609,7 +641,7 @@ fontFamily: "inherit",
 ))}
 </div>
  
-<div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 1, background: T.border, marginBottom: 24 }}>
+<div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: 1, background: T.border, marginBottom: 24 }}>
 {[
 { title: "Aanleiding", body: "Gemeenten maken effectief gebruik van social media, maar missen vaak een expliciete ethische afweging bij kanaalkeuze. Bereik alleen is niet meer voldoende." },
 { title: "gemeentelijke communicatiestrategie", body: "Drie pijlers: een ethisch afwegingskader, bewuste platformkeuze en spreiding, en toekomstige aanbevelingen voor jongerenbereik." },
@@ -626,12 +658,12 @@ onMouseLeave={e => e.currentTarget.style.borderTopColor = "transparent"}
 ))}
 </div>
  
-<div style={{ background: T.accentBg, border: `1px solid ${T.accentBorder}`, borderLeft: `4px solid ${T.accent}`, padding: "18px 22px", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 12 }}>
+<div style={{ background: T.accentBg, border: `1px solid ${T.accentBorder}`, borderLeft: `4px solid ${T.accent}`, padding: isMobile ? "16px" : "18px 22px", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 12, flexDirection: isMobile ? "column" : "row" }}>
 <div style={{ textAlign: "center", flex: 1 }}>
 <div style={{ fontWeight: 700, fontSize: 15, color: T.text, fontFamily: "Georgia, serif" }}>Klaar om een platform te beoordelen?</div>
 <div style={{ fontSize: 13, color: T.textMid, marginTop: 4 }}>Een volledige beoordeling duurt gemiddeld 5–10 minuten.</div>
 </div>
-<button onClick={() => setPage("beoordelen")} style={{ padding: "11px 24px", background: T.accent, color: T.white, border: "none", fontWeight: 700, fontSize: 14, cursor: "pointer", borderRadius: 2, fontFamily: "inherit" }}>
+<button onClick={() => setPage("beoordelen")} style={{ padding: "11px 24px", background: T.accent, color: T.white, border: "none", fontWeight: 700, fontSize: 14, cursor: "pointer", borderRadius: 2, fontFamily: "inherit", width: isMobile ? "100%" : "auto" }}>
 Start beoordeling →
 </button>
 </div>
@@ -645,6 +677,7 @@ const [naam, setNaam] = useState("");
 const [scores, setScores] = useState({});
 const [open, setOpen] = useState(null);
 const [step, setStep] = useState("invullen");
+const isMobile = useIsMobile();
  
 const filled = Object.keys(scores).length;
 const totaal = getTotaal(scores);
@@ -658,13 +691,13 @@ const stappen = watNuStappen(adv, naam, scores);
  
 return (
 <div>
-<div style={{ background: T.accent, padding: "22px 26px", marginBottom: 20, display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 12 }}>
+<div style={{ background: T.accent, padding: isMobile ? "20px 16px" : "22px 26px", marginBottom: 20, display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 12, flexDirection: isMobile ? "column" : "row" }}>
 <div style={{ textAlign: "center", flex: 1 }}>
 <div style={{ fontSize: 11, color: "rgba(255,255,255,0.65)", textTransform: "uppercase", letterSpacing: 1.5, fontWeight: 700, marginBottom: 6 }}>Beoordelingsresultaat</div>
 <h1 style={{ margin: 0, fontSize: 22, fontWeight: 900, color: T.white, fontFamily: "Georgia, serif" }}>{naam}</h1>
 <div style={{ fontSize: 12, color: "rgba(255,255,255,0.55)", marginTop: 4, fontStyle: "italic" }}>{new Date().toLocaleDateString("nl-NL")}</div>
 </div>
-<button onClick={handleReset} style={{ padding: "9px 18px", background: "rgba(255,255,255,0.15)", border: "1px solid rgba(255,255,255,0.3)", color: T.white, fontWeight: 600, fontSize: 13, cursor: "pointer", borderRadius: 2, fontFamily: "inherit" }}>
+<button onClick={handleReset} style={{ padding: "9px 18px", background: "rgba(255,255,255,0.15)", border: "1px solid rgba(255,255,255,0.3)", color: T.white, fontWeight: 600, fontSize: 13, cursor: "pointer", borderRadius: 2, fontFamily: "inherit", width: isMobile ? "100%" : "auto" }}>
 ↩ Nieuwe beoordeling
 </button>
 </div>
@@ -684,7 +717,7 @@ transition: "all 0.12s", textAlign: "center",
  
 {step === "resultaat" && (
 <>
-<div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 16 }}>
+<div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: 16, marginBottom: 16 }}>
 <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
 <AdviesCard totaal={totaal} />
 <div style={{ border: `1px solid ${T.border}`, padding: "16px 18px", background: T.bgCard, textAlign: "center" }}>
@@ -693,12 +726,12 @@ transition: "all 0.12s", textAlign: "center",
 </div>
 </div>
 <div style={{ border: `1px solid ${T.border}`, padding: 16, background: T.bgCard, display: "flex", alignItems: "center", justifyContent: "center" }}>
-<RadarChart scores={scores} size={200} />
+<RadarChart scores={scores} size={isMobile ? 170 : 200} />
 </div>
 </div>
  
 {(sterke.length > 0 || zwakke.length > 0) && (
-<div style={{ display: "grid", gridTemplateColumns: sterke.length && zwakke.length ? "1fr 1fr" : "1fr", gap: 12, marginBottom: 16 }}>
+<div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : sterke.length && zwakke.length ? "1fr 1fr" : "1fr", gap: 12, marginBottom: 16 }}>
 {sterke.length > 0 && (
 <div style={{ background: "#f0fff4", border: "1px solid #9ae6b4", padding: "14px 16px", textAlign: "center" }}>
 <div style={{ fontSize: 11, fontWeight: 700, color: "#276749", textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 10 }}>Sterke punten</div>
@@ -737,7 +770,7 @@ transition: "all 0.12s", textAlign: "center",
 ))}
 </div>
  
-<div onClick={() => setStep("watnow")} style={{ background: T.accentBg, border: `1px solid ${T.accentBorder}`, borderLeft: `4px solid ${T.accent}`, padding: "16px 20px", cursor: "pointer", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+<div onClick={() => setStep("watnow")} style={{ background: T.accentBg, border: `1px solid ${T.accentBorder}`, borderLeft: `4px solid ${T.accent}`, padding: isMobile ? "16px" : "16px 20px", cursor: "pointer", display: "flex", justifyContent: "space-between", alignItems: "center", gap: 10 }}>
 <div style={{ textAlign: "center", flex: 1 }}>
 <div style={{ fontWeight: 700, fontSize: 15, color: T.text, fontFamily: "Georgia, serif" }}>Wat nu?</div>
 <div style={{ fontSize: 13, color: T.textMid, marginTop: 4 }}>Bekijk concrete vervolgstappen conform de gemeentelijke communicatiestrategie.</div>
@@ -749,17 +782,17 @@ transition: "all 0.12s", textAlign: "center",
  
 {step === "watnow" && (
 <>
-<div style={{ background: adv.bg, border: `1px solid ${adv.border}`, padding: "14px 18px", marginBottom: 20, display: "flex", alignItems: "center", gap: 14, justifyContent: "center" }}>
+<div style={{ background: adv.bg, border: `1px solid ${adv.border}`, padding: "14px 18px", marginBottom: 20, display: "flex", alignItems: "center", gap: 14, justifyContent: "center", flexDirection: isMobile ? "column" : "row" }}>
 <div style={{ width: 12, height: 12, borderRadius: "50%", background: adv.dot, flexShrink: 0 }} />
 <div style={{ textAlign: "center" }}>
 <span style={{ fontWeight: 800, color: adv.textCol, fontFamily: "Georgia, serif", fontSize: 15 }}>{adv.label}</span>
-<span style={{ color: T.textMid, fontSize: 13, marginLeft: 10 }}>{naam} — {totaal}/30 punten</span>
+<span style={{ color: T.textMid, fontSize: 13, marginLeft: isMobile ? 0 : 10, display: isMobile ? "block" : "inline", marginTop: isMobile ? 4 : 0 }}>{naam} — {totaal}/30 punten</span>
 </div>
 </div>
 <div style={{ marginBottom: 20 }}>
 <div style={{ fontSize: 11, fontWeight: 700, color: T.text, textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 16, textAlign: "center" }}>Aanbevolen vervolgstappen</div>
 {stappen.map((s, i) => (
-<div key={i} style={{ display: "flex", gap: 16, marginBottom: 16, background: T.bgCard, border: `1px solid ${T.border}`, borderLeft: `4px solid ${T.accent}`, padding: "16px 18px" }}>
+<div key={i} style={{ display: "flex", gap: 16, marginBottom: 16, background: T.bgCard, border: `1px solid ${T.border}`, borderLeft: `4px solid ${T.accent}`, padding: "16px 18px", alignItems: "flex-start" }}>
 <div style={{ fontSize: 22, flexShrink: 0, marginTop: 2 }}>{s.icon}</div>
 <div style={{ textAlign: "left" }}>
 <div style={{ fontWeight: 700, fontSize: 14, color: T.text, fontFamily: "Georgia, serif", marginBottom: 6 }}>{i+1}. {s.title}</div>
@@ -797,7 +830,7 @@ return (
 <div style={{ border: `1px solid ${T.border}`, padding: "16px 18px", background: T.bgCard, textAlign: "center", marginBottom: 20 }}>
 <label style={{ display: "block", fontWeight: 600, fontSize: 12, color: T.text, marginBottom: 8, textTransform: "uppercase", letterSpacing: 0.5 }}>Naam platform *</label>
 <input value={naam} onChange={e => setNaam(e.target.value)} placeholder="Bijv. Bluesky, Threads, Spotify…"
-style={{ width: "60%", padding: "10px 12px", border: `1px solid ${T.borderDark}`, fontSize: 14, color: T.text, outline: "none", boxSizing: "border-box", fontFamily: "inherit", background: T.bg, borderRadius: 0, textAlign: "center" }} />
+style={{ width: isMobile ? "100%" : "60%", padding: "10px 12px", border: `1px solid ${T.borderDark}`, fontSize: 14, color: T.text, outline: "none", boxSizing: "border-box", fontFamily: "inherit", background: T.bg, borderRadius: 0, textAlign: "center" }} />
 </div>
  
 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
@@ -811,10 +844,10 @@ style={{ width: "60%", padding: "10px 12px", border: `1px solid ${T.borderDark}`
 {CRITERIA.map(c => (
 <div key={c.id} style={{ border: `1px solid ${open === c.id ? T.accentBorder : T.border}`, marginBottom: 4, borderLeft: `4px solid ${scores[c.id] ? T.accent : T.borderDark}`, background: T.bgCard }}>
 <div onClick={() => setOpen(open === c.id ? null : c.id)}
-style={{ padding: "14px 18px", cursor: "pointer", display: "flex", justifyContent: "space-between", alignItems: "center", background: open === c.id ? T.accentBg : T.bgCard }}>
-<div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+style={{ padding: isMobile ? "14px 12px" : "14px 18px", cursor: "pointer", display: "flex", justifyContent: "space-between", alignItems: "center", background: open === c.id ? T.accentBg : T.bgCard, gap: 10 }}>
+<div style={{ display: "flex", alignItems: "center", gap: 12, minWidth: 0 }}>
 <span style={{ fontSize: 10, fontWeight: 800, color: T.accent, minWidth: 28, fontFamily: "Georgia, serif" }}>{c.nr}</span>
-<div style={{ textAlign: "left" }}>
+<div style={{ textAlign: "left", minWidth: 0 }}>
 <div style={{ fontWeight: 600, fontSize: 14, color: T.text }}>{c.title}</div>
 {scores[c.id] && <div style={{ fontSize: 11, color: T.slateLight, marginTop: 2, fontStyle: "italic" }}>Score: {scores[c.id]}/5</div>}
 </div>
@@ -833,7 +866,7 @@ color: scores[c.id] >= 4 ? "#276749" : scores[c.id] <= 2 ? "#742a2a" : "#744210"
 </div>
  
 {open === c.id && (
-<div style={{ padding: "16px 24px 20px", borderTop: `1px solid ${T.border}`, textAlign: "center" }}>
+<div style={{ padding: isMobile ? "14px 12px 18px" : "16px 24px 20px", borderTop: `1px solid ${T.border}`, textAlign: "center" }}>
 <div style={{ background: T.accentBg, padding: "12px 16px", marginBottom: 16, borderLeft: `2px solid ${T.accent}`, textAlign: "center" }}>
 <div style={{ fontSize: 11, fontWeight: 700, color: T.accent, textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 4 }}>Definitie</div>
 <p style={{ margin: 0, fontSize: 13, color: T.textMid, lineHeight: 1.75 }}>{c.definition}</p>
@@ -883,6 +916,7 @@ background: (!naam.trim() || filled < 6) ? T.borderDark : T.accent,
 color: T.white, border: "none", fontWeight: 700, fontSize: 14,
 cursor: (!naam.trim() || filled < 6) ? "not-allowed" : "pointer",
 borderRadius: 2, fontFamily: "inherit",
+width: isMobile ? "100%" : "auto",
 }}>
 {filled < 6 ? `Nog ${6-filled} ${6-filled===1 ? "criterium" : "criteria"} invullen` : "Bekijk beoordeling →"}
 </button>
@@ -894,6 +928,7 @@ borderRadius: 2, fontFamily: "inherit",
 // ─── VERGELIJK ────────────────────────────────────────────────────────────────
 function VergelijkPage() {
 const [selected, setSelected] = useState(null);
+const isMobile = useIsMobile();
 const sorted = [...VERGELIJK_PLATFORMEN].sort((a, b) => getTotaal(b.scores) - getTotaal(a.scores));
  
 return (
@@ -903,9 +938,10 @@ return (
 <div style={{ background: T.accentBg, border: `1px solid ${T.accentBorder}`, borderLeft: `3px solid ${T.accent}`, padding: "12px 16px", marginBottom: 20, fontSize: 13, color: T.accentMid, textAlign: "center" }}>
 <strong>Toelichting:</strong> Deze scores zijn gebaseerd op de bevindingen, benchmarkanalyse en platformadviezen uit het afwegingskader. Ze zijn indicatief en kunnen per situatie afwijken.
 </div>
+{isMobile && <div style={{ fontSize: 11, color: T.slateLight, textAlign: "center", marginBottom: 8, fontStyle: "italic" }}>← Veeg om de tabel te scrollen →</div>}
  
-<div style={{ border: `1px solid ${T.border}`, overflow: "hidden", marginBottom: 20 }}>
-<table style={{ width: "100%", borderCollapse: "collapse" }}>
+<div style={{ border: `1px solid ${T.border}`, overflowX: "auto", overflowY: "hidden", marginBottom: 20, WebkitOverflowScrolling: "touch", borderRadius: 2 }}>
+<table style={{ width: "100%", minWidth: 640, borderCollapse: "collapse" }}>
 <thead>
 <tr style={{ background: T.accent }}>
 <th style={{ padding: "12px 16px", textAlign: "center", fontSize: 12, fontWeight: 700, color: T.white, fontFamily: "Georgia, serif" }}>Platform</th>
@@ -947,8 +983,8 @@ return (
 <div style={{ background: T.accent, padding: "13px 18px", textAlign: "center" }}>
 <h2 style={{ margin: 0, fontSize: 16, fontWeight: 800, color: T.white, fontFamily: "Georgia, serif" }}>Detail: {selected.naam}</h2>
 </div>
-<div style={{ padding: "18px" }}>
-<div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 18 }}>
+<div style={{ padding: isMobile ? "16px 12px" : "18px" }}>
+<div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: 18 }}>
 <div>
 {CRITERIA.map(c => (
 <div key={c.id} style={{ marginBottom: 13, textAlign: "center" }}>
@@ -961,7 +997,7 @@ return (
 ))}
 </div>
 <div>
-<RadarChart scores={selected.scores} size={190} />
+<RadarChart scores={selected.scores} size={isMobile ? 170 : 190} />
 <div style={{ marginTop: 12 }}><AdviesCard totaal={getTotaal(selected.scores)} /></div>
 </div>
 </div>
@@ -1095,10 +1131,14 @@ const NAV = [
 { id: "rapport", label: "Adviesrapport" },
 ];
  
+// Mobile nav icons
+const NAV_ICONS = { home: "🏠", beoordelen: "📋", vergelijk: "📊", over: "ℹ️", kennisbank: "📚", rapport: "📄" };
+ 
 // ─── App ──────────────────────────────────────────────────────────────────────
 function App() {
 const [page, setPage] = useState("home");
 const [showModal, setShowModal] = useState(true);
+const isMobile = useIsMobile();
  
 const renderPage = () => {
 switch (page) {
@@ -1112,6 +1152,60 @@ default: return <HomePage setPage={setPage} />;
 }
 };
  
+// ── MOBILE LAYOUT ──────────────────────────────────────────────────────────
+if (isMobile) {
+return (
+<div style={{ display: "flex", flexDirection: "column", minHeight: "100dvh", background: T.bg, fontFamily: "'Segoe UI', 'Helvetica Neue', Arial, sans-serif" }}>
+{showModal && <WelcomeModal onClose={() => setShowModal(false)} />}
+ 
+{/* Mobile top bar */}
+<div style={{ background: T.accent, padding: "12px 16px", display: "flex", alignItems: "center", justifyContent: "space-between", position: "sticky", top: 0, zIndex: 50, flexShrink: 0 }}>
+<div style={{ fontFamily: "Georgia, serif", fontWeight: 900, fontSize: 15, color: T.white, lineHeight: 1.2 }}>
+Afwegingskader Social Media
+</div>
+<button onClick={() => setShowModal(true)} style={{ fontSize: 12, color: T.white, background: "rgba(255,255,255,0.2)", border: "1px solid rgba(255,255,255,0.3)", padding: "5px 11px", borderRadius: 2, fontWeight: 600 }}>
+? Uitleg
+</button>
+</div>
+ 
+{/* Page content — paddingBottom leaves room for bottom nav */}
+<div style={{ flex: 1, padding: "18px 14px 90px", overflowX: "hidden", minWidth: 0 }}>
+{renderPage()}
+</div>
+ 
+{/* Sticky bottom navigation */}
+<nav style={{
+position: "fixed", bottom: 0, left: 0, right: 0, zIndex: 50,
+background: T.accent,
+borderTop: "1px solid rgba(255,255,255,0.15)",
+display: "flex",
+paddingBottom: "env(safe-area-inset-bottom, 0px)",
+}}>
+{NAV.map(item => {
+const active = page === item.id;
+return (
+<button key={item.id} onClick={() => setPage(item.id)} style={{
+flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
+padding: "8px 2px 6px",
+background: active ? "rgba(255,255,255,0.18)" : "transparent",
+border: "none",
+borderTop: `2px solid ${active ? T.white : "transparent"}`,
+color: active ? T.white : "rgba(255,255,255,0.55)",
+fontSize: 9, fontWeight: active ? 700 : 400,
+fontFamily: "inherit", gap: 3,
+transition: "all 0.12s",
+}}>
+<span style={{ fontSize: 17, lineHeight: 1 }}>{NAV_ICONS[item.id]}</span>
+<span style={{ lineHeight: 1.2, textAlign: "center", maxWidth: 52 }}>{item.label}</span>
+</button>
+);
+})}
+</nav>
+</div>
+);
+}
+ 
+// ── DESKTOP LAYOUT ─────────────────────────────────────────────────────────
 return (
 <div style={{ display: "flex", minHeight: "100vh", background: T.bg, fontFamily: "'Segoe UI', 'Helvetica Neue', Arial, sans-serif" }}>
 {showModal && <WelcomeModal onClose={() => setShowModal(false)} />}
@@ -1122,18 +1216,15 @@ return (
 <div style={{ fontFamily: "Georgia, serif", fontWeight: 900, fontSize: 14, color: T.white, marginBottom: 4, lineHeight: 1.4 }}>
 Afwegingskader<br />Social Media
 </div>
-<div style={{ width: 28, height: 2, background: "rgba(255,255,255,0.4)", margin: "10px auto 10px" }} />
-<div style={{ fontSize: 11, color: "rgba(255,255,255,0.6)", lineHeight: 1.6 }}>
-Voor gemeenten
-</div>
+<div style={{ width: 28, height: 2, background: "rgba(255,255,255,0.4)", margin: "10px auto" }} />
+<div style={{ fontSize: 11, color: "rgba(255,255,255,0.6)", lineHeight: 1.6 }}>Voor gemeenten</div>
 </div>
  
 <nav style={{ flex: 1, padding: "10px 0" }}>
 {NAV.map(item => {
 const active = page === item.id;
 return (
-<button key={item.id} onClick={() => setPage(item.id)}
-style={{
+<button key={item.id} onClick={() => setPage(item.id)} style={{
 width: "100%", display: "flex", alignItems: "center", justifyContent: "center",
 padding: "12px 22px",
 background: active ? "rgba(255,255,255,0.15)" : "transparent",
@@ -1141,14 +1232,13 @@ border: "none",
 borderLeft: `3px solid ${active ? T.white : "transparent"}`,
 color: active ? T.white : "rgba(255,255,255,0.65)",
 fontWeight: active ? 700 : 400, fontSize: 13, textAlign: "center",
-cursor: "pointer", transition: "all 0.12s", fontFamily: "inherit",
+transition: "all 0.12s",
 borderBottom: "1px solid rgba(255,255,255,0.06)",
+borderRadius: 0,
 }}
 onMouseEnter={e => { if (!active) { e.currentTarget.style.background = "rgba(255,255,255,0.08)"; e.currentTarget.style.color = T.white; } }}
 onMouseLeave={e => { if (!active) { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "rgba(255,255,255,0.65)"; } }}
->
-{item.label}
-</button>
+>{item.label}</button>
 );
 })}
 </nav>
@@ -1156,8 +1246,7 @@ onMouseLeave={e => { if (!active) { e.currentTarget.style.background = "transpar
 <div style={{ padding: "16px 22px", borderTop: "1px solid rgba(255,255,255,0.12)", textAlign: "center" }}>
 <div style={{ fontSize: 12, color: "rgba(255,255,255,0.8)", fontWeight: 600, marginBottom: 4 }}>Hilde van Oosten</div>
 <div style={{ fontSize: 11, color: "rgba(255,255,255,0.45)", lineHeight: 1.7, fontStyle: "italic" }}>
-Beoordelingen worden niet opgeslagen.<br />
-Versie 1.0 — {new Date().getFullYear()}
+Beoordelingen worden niet opgeslagen.<br />Versie 1.0 — {new Date().getFullYear()}
 </div>
 </div>
 </div>
@@ -1170,11 +1259,10 @@ Versie 1.0 — {new Date().getFullYear()}
 <span style={{ color: T.borderDark, fontSize: 13 }}>›</span>
 <span style={{ fontSize: 12, color: T.accent, fontWeight: 600 }}>{NAV.find(n => n.id === page)?.label}</span>
 </div>
-<button onClick={() => setShowModal(true)} style={{ fontSize: 11, color: T.accent, background: "none", border: `1px solid ${T.accentBorder}`, padding: "4px 12px", cursor: "pointer", fontFamily: "inherit", borderRadius: 2, fontWeight: 600 }}>
+<button onClick={() => setShowModal(true)} style={{ fontSize: 11, color: T.accent, background: "none", border: `1px solid ${T.accentBorder}`, padding: "4px 12px", borderRadius: 2, fontWeight: 600 }}>
 ? Uitleg
 </button>
 </div>
- 
 <div style={{ flex: 1, padding: "28px 32px", maxWidth: 940, width: "100%", margin: "0 auto", boxSizing: "border-box" }}>
 {renderPage()}
 </div>
@@ -1183,9 +1271,10 @@ Versie 1.0 — {new Date().getFullYear()}
 );
 }
  
-
-
+ 
+ 
 ReactDOM.createRoot(document.getElementById('root')).render(<App />);
   </script>
 </body>
 </html>
+ 
