@@ -1,0 +1,1196 @@
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Afwegingskader Social Media</title>
+</head>
+<body style="margin:0">
+  <div id="root"></div>
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script type="text/babel">
+const { useState } = React;
+// ─── Design Tokens — professioneel marineblauw/slate palet ───────────────────
+const T = {
+bg: "#f4f6f9",
+bgAlt: "#eaecf2",
+bgCard: "#ffffff",
+accent: "#1e3a5f", // diepblauw hoofdaccent
+accentMid: "#2e5385",
+accentLight: "#d6e4f7",
+accentBorder:"#a8c4e0",
+accentBg: "#eef4fb",
+slate: "#4a5568",
+slateMid: "#718096",
+slateLight: "#a0aec0",
+border: "#dde3ed",
+borderDark: "#b8c4d4",
+text: "#1a202c",
+textMid: "#4a5568",
+textLight: "#718096",
+white: "#ffffff",
+// Status kleuren
+groen: "#276749",
+groenBg: "#f0fff4",
+groenBorder: "#9ae6b4",
+geel: "#744210",
+geelBg: "#fffff0",
+geelBorder: "#f6e05e",
+oranje: "#7b341e",
+oranjeBg: "#fffaf0",
+oranjeBorder:"#fbd38d",
+rood: "#742a2a",
+roodBg: "#fff5f5",
+roodBorder: "#feb2b2",
+};
+ 
+// ─── Data — gebaseerd op het afwegingskader ──────────
+const CRITERIA = [
+{
+id: "bereik", nr: "01", title: "Nabijheid en bereik", short: "Bereik",
+definition: "In hoeverre bereikt het platform inwoners die nu onvoldoende worden bereikt via bestaande gemeentelijke communicatiekanalen? Denk hierbij aan doelgroepgrootte, leeftijdsopbouw en geografische spreiding.",
+waarom: "Uit mediaonderzoek blijkt dat social media een groot aandeel hebben in de manier waarop bewoners bereikt worden én bereikt willen worden. Platforms die een unieke of moeilijk bereikbare doelgroep bedienen — zoals jongeren onder de 25 — leveren strategische meerwaarde.",
+scores: {
+1: "Bereikt vrijwel geen relevante gemeentelijke doelgroep.",
+2: "Beperkt aanvullend bereik ten opzichte van bestaande kanalen.",
+3: "Gemiddeld bereik, enige overlapping met bestaande doelgroepen.",
+4: "Groot aanvullend bereik dat bestaande kanalen versterkt.",
+5: "Bereikt een unieke of moeilijk bereikbare doelgroep (bijv. jongeren onder 25).",
+},
+voorbeelden: [
+{ naam: "Instagram", score: 4 }, { naam: "Facebook", score: 4 },
+{ naam: "WhatsApp Kanaal", score: 4 }, { naam: "Snapchat", score: 3 },
+{ naam: "X", score: 3 }, { naam: "TikTok", score: 3 },
+],
+aandachtspunten: [
+"Uit de contentstrategie 2024 blijkt dat de doelgroep onder 25 jaar met de huidige kanalen nauwelijks bereikt wordt.",
+"Overweeg demografische data bij de beoordeling — het Newcom Mediaonderzoek 2026 biedt actuele cijfers.",
+],
+},
+{
+id: "opdracht", nr: "02", title: "Publieke opdracht en functionaliteit", short: "Functionaliteit",
+definition: "In welke mate ondersteunt het platform de publieke taak van gemeenten? De contentstrategie 2024 onderscheidt vier centrale contentdoelen: informeren, activeren, inspireren en participeren.",
+waarom: "De publieke opdracht van gemeenten omvat bereikbaarheid en nabijheid voor inwoners, betrouwbare informatievoorziening, ondersteuning van dienstverlening en participatie. Een platform dat hier niet aan bijdraagt, is geen efficiënte inzet van publieke middelen.",
+scores: {
+1: "Draagt nauwelijks bij aan de vier gemeentelijke contentdoelen.",
+2: "Ondersteunt één contentdoel beperkt.",
+3: "Gemiddelde ondersteuning van twee of meer contentdoelen.",
+4: "Goed bruikbaar voor informeren én activeren of participeren.",
+5: "Ondersteunt alle vier de contentdoelen: informeren, activeren, inspireren en participeren.",
+},
+voorbeelden: [
+{ naam: "Instagram", score: 4 }, { naam: "Facebook", score: 4 },
+{ naam: "LinkedIn", score: 3 }, { naam: "YouTube", score: 3 },
+{ naam: "X", score: 2 },
+],
+aandachtspunten: [
+"LinkedIn is uitsluitend geschikt voor arbeidsmarktcommunicatie en profilering — niet voor communicatie richting inwoners.",
+"X wordt alleen nog zinvol ingezet voor persberichten richting pers en journalisten.",
+],
+},
+{
+id: "juridisch", nr: "03", title: "Wettelijke en bestuurlijke kaders", short: "Juridisch",
+definition: "Past het platform binnen de wettelijke verantwoordelijkheden van gemeenten? Denk aan de AVG (dataminimalisatie, privacy, transparantie), de Archiefwet, de Wet open overheid en de Wet hergebruik van overheidsinformatie.",
+waarom: "Als overheid hebben gemeenten een bijzondere verantwoordelijkheid. De AVG vereist dataminimalisatie, privacy by design en transparantie via privacyverklaringen. De Archiefwet stelt eisen aan bewaring van communicatie. Het Rijk raadt apps uit landen met een offensief cyberprogramma — zoals China — af voor gebruik op werkapparaten.",
+scores: {
+1: "Grote juridische risico's; aantoonbaar niet conform AVG of Archiefwet.",
+2: "Juridische risico's aanwezig; aanpassingen vereist om te voldoen aan wet- en regelgeving.",
+3: "Beperkte risico's; mitigeerbaar met aanvullende maatregelen.",
+4: "Grotendeels compliant; kleine aandachtspunten resteerbaar.",
+5: "Sterke aansluiting op AVG, Archiefwet en overige wettelijke vereisten.",
+},
+voorbeelden: [
+{ naam: "TikTok", score: 1 }, { naam: "X", score: 2 },
+{ naam: "Facebook/Instagram", score: 2 }, { naam: "Mastodon", score: 4 },
+{ naam: "Signal", score: 2 },
+],
+aandachtspunten: [
+"TikTok is een Chinese app: het Rijk raadt gebruik op werkapparaten af vanwege verhoogde risico's op spionage en ongeautoriseerde toegang.",
+"Meta (Facebook/Instagram) gebruikt openbare gemeentecontent voor AI-training zonder expliciete toestemming — dit is strijdig met het principe van doelbinding.",
+"Signal biedt weinig mogelijkheden tot archivering en past daarmee niet bij gemeentelijke communicatieverplichtingen.",
+],
+},
+{
+id: "soevereiniteit", nr: "04", title: "Digitale soevereiniteit", short: "Soevereiniteit",
+definition: "In welke mate blijft de organisatie onafhankelijk van commerciële technologiebedrijven en behoudt zij controle over data, content en bereik? Dit criterium is rechtstreeks ontleend aan de position paper.",
+waarom: "Uit de bevindingen blijkt dat gemeenten sterk afhankelijk kunnen zijn van een beperkt aantal commerciële platforms. Algoritmes, platformregels en verdienmodellen hebben grote invloed op bereik en informatievoorziening. De position paper benoemt digitale soevereiniteit als kernoverweging en de Nederlandse overheid stimuleert inzet van open-source alternatieven zoals Mastodon.",
+scores: {
+1: "Volledige afhankelijkheid van één commercieel platform; geen eigen controle over bereik of data.",
+2: "Grote afhankelijkheid; data en algoritmen volledig buiten eigen beheer.",
+3: "Gedeelde controle; enige eigen invloed mogelijk via eigen kanalen als aanvulling.",
+4: "Beperkte afhankelijkheid; de organisatie heeft substantiële controle en eigen alternatieven.",
+5: "Volledige controle; open source of volledig eigenaarschap van data en bereik.",
+},
+voorbeelden: [
+{ naam: "TikTok", score: 1 }, { naam: "Instagram", score: 2 },
+{ naam: "Facebook", score: 2 }, { naam: "X", score: 2 },
+{ naam: "Mastodon", score: 5 }, { naam: "gemeentelijke website", score: 5 },
+],
+aandachtspunten: [
+"De position paper adviseert bewust te spreiden over meerdere kanalen en niet één platform bepalend te laten zijn voor bereikbaarheid.",
+"Amsterdam zette Mastodon in als alternatief nadat X werd verlaten. De overheid beheert een eigen Mastodon-server.",
+"Investeer in eigen kanalen: website, nieuwsbrief, wijkbladen en participatieplatform Onze Stad.",
+],
+},
+{
+id: "ethisch", nr: "05", title: "Maatschappelijke en ethische aspecten", short: "Ethisch",
+definition: "Welke maatschappelijke gevolgen en risico's brengt het platform met zich mee voor inwoners van Nijmegen? Denk aan privacy, inclusiviteit, desinformatie, verslavend ontwerp en online veiligheid — met extra aandacht voor jongeren.",
+waarom: "Uit het Newcom Nationaal Social Media Onderzoek 2026 blijkt dat 2,6 miljoen Nederlanders zich ongelukkiger voelen door social mediagebruik, voornamelijk jongeren (30%). Het kabinet werkt aan een Europese minimumleeftijd van 15 jaar. Als publieke instantie hebben gemeenten een voorbeeldfunctie.",
+scores: {
+1: "Grote maatschappelijke risico's: aantoonbare negatieve impact op mentale gezondheid, privacy of desinformatie.",
+2: "Aanzienlijke risico's; verslavend ontwerp of beperkte moderatiemogelijkheden.",
+3: "Gemiddelde risico's; mitigeerbaar met beleid en duidelijke kaders.",
+4: "Beperkte risico's; goede moderatie-opties en geen aantoonbaar verslavend ontwerp.",
+5: "Nauwelijks risico's; platform bevordert verbondenheid, inclusiviteit en veiligheid.",
+},
+voorbeelden: [
+{ naam: "TikTok", score: 1 }, { naam: "YouTube Shorts", score: 2 },
+{ naam: "Snapchat", score: 3 }, { naam: "Mastodon", score: 4 },
+{ naam: "Bluesky", score: 4 },
+],
+aandachtspunten: [
+"TikTok: onderzoek toont aan dat de gepersonaliseerde feed bij jongeren kan bijdragen aan verslavend gebruik en negatieve effecten op mentale gezondheid (Amnesty International, 2023).",
+"Snapchat heeft gamification-elementen (streaks, scores) ontworpen om gebruik te stimuleren, maar toont ook positieve effecten op sociale verbondenheid (Snap Inc., 2024).",
+"Bluesky heeft geen dominante algoritmes en is minder gericht op maximale betrokkenheid — hierdoor minder verslavend van ontwerp.",
+],
+},
+{
+id: "capaciteit", nr: "06", title: "Impact op afdeling Communicatie", short: "Capaciteit",
+definition: "Hoeveel capaciteit vraagt het platform van de afdeling Communicatie? Denk aan dagelijks beheer, moderatie, specifieke contentproductie en benodigde specialistische kennis.",
+waarom: "Uit de bevindingen blijkt dat de kloof tussen gemeenten groeit: grote gemeenten hebben meer medewerkers beschikbaar voor social media dan kleine. gemeenten maken bewuste keuzes in wat ze wel én bewust niet oppakken. Een hoge beheerslast vraagt een expliciete afweging ten opzichte van de meerwaarde.",
+scores: {
+1: "Zeer arbeidsintensief: dagelijks beheer, intensieve moderatie en specialistische contentproductie vereist.",
+2: "Arbeidsintensief: regelmatig beheer en moderatie noodzakelijk.",
+3: "Gemiddelde belasting: wekelijks beheer en standaard contentproductie volstaat.",
+4: "Beperkte belasting: content deels herbruikbaar van andere kanalen, weinig moderatie.",
+5: "Zeer beperkte belasting: minimale moderatie, content volledig herbruikbaar.",
+},
+voorbeelden: [
+{ naam: "TikTok", score: 1 }, { naam: "Instagram", score: 3 },
+{ naam: "Facebook", score: 3 }, { naam: "WhatsApp Kanaal", score: 4 },
+{ naam: "YouTube", score: 3 },
+],
+aandachtspunten: [
+"Short-form video (Reels, Shorts, TikTok) vraagt specifieke productiekennis en een hogere tijdsinvestering.",
+"WhatsApp-kanalen kunnen worden ingezet met relatief lage beheerslast: korte nieuwtjes, deelbaar met grote groepen.",
+"Overweeg of contentproductie intern geborgd is of extern belegd moet worden.",
+],
+},
+];
+ 
+// Vergelijkingsplatformen — gebaseerd op benchmarkanalyse en platformadvies uit het rapport
+const VERGELIJK_PLATFORMEN = [
+{
+naam: "Instagram",
+advies: "Actief inzetten",
+scores: { bereik: 4, opdracht: 4, juridisch: 2, soevereiniteit: 2, ethisch: 3, capaciteit: 3 },
+toelichting: "Geschikt voor visuele content en binden van inwoners. Bij formele informatie altijd doorverwijzen naar eigen kanalen.",
+},
+{
+naam: "Facebook",
+advies: "Actief inzetten",
+scores: { bereik: 4, opdracht: 4, juridisch: 2, soevereiniteit: 2, ethisch: 3, capaciteit: 3 },
+toelichting: "Effectief voor nieuws en wijkcommunicatie (30-65 jaar). Nooit als enige informatiebron gebruiken.",
+},
+{
+naam: "WhatsApp Kanaal",
+advies: "Overwegen",
+scores: { bereik: 4, opdracht: 3, juridisch: 3, soevereiniteit: 2, ethisch: 3, capaciteit: 4 },
+toelichting: "Den Bosch en Bergen op Zoom experimenteren succesvol. Laagdrempelig en dicht bij inwoners.",
+},
+{
+naam: "X (Twitter)",
+advies: "Kritisch heroverwegen",
+scores: { bereik: 3, opdracht: 2, juridisch: 2, soevereiniteit: 2, ethisch: 2, capaciteit: 3 },
+toelichting: "Alleen nog inzetten als het iets toevoegt voor pers en journalisten. Stoppen als bereik verder afneemt.",
+},
+{
+naam: "Mastodon",
+advies: "Onderzoeken",
+scores: { bereik: 2, opdracht: 2, juridisch: 4, soevereiniteit: 5, ethisch: 4, capaciteit: 3 },
+toelichting: "Open source, geen commercieel algoritme. Inzetten als doelgroep van X aangeeft dit platform te gaan gebruiken.",
+},
+{
+naam: "TikTok",
+advies: "Niet inzetten",
+scores: { bereik: 3, opdracht: 2, juridisch: 1, soevereiniteit: 1, ethisch: 1, capaciteit: 1 },
+toelichting: "Vanwege privacyrisico's, verslavend ontwerp en impact op jongeren past dit niet bij de rol van gemeenten.",
+},
+];
+ 
+// ─── Helpers ──────────────────────────────────────────────────────────────────
+function getTotaal(scores) {
+return Object.values(scores).reduce((s, v) => s + (v || 0), 0);
+}
+ 
+function getAdvies(totaal) {
+if (totaal >= 24) return { label: "Actief inzetten", dot: "#276749", bg: "#f0fff4", border: "#9ae6b4", textCol: "#276749" };
+if (totaal >= 18) return { label: "Voorwaardelijk inzetten", dot: "#b7791f", bg: "#fffff0", border: "#f6e05e", textCol: "#744210" };
+if (totaal >= 12) return { label: "Pilot of experiment", dot: "#c05621", bg: "#fffaf0", border: "#fbd38d", textCol: "#7b341e" };
+return { label: "Niet inzetten", dot: "#c53030", bg: "#fff5f5", border: "#feb2b2", textCol: "#742a2a" };
+}
+ 
+function beleidsadvies(naam, scores, totaal) {
+const sterke = CRITERIA.filter(c => (scores[c.id] || 0) >= 4);
+const zwakke = CRITERIA.filter(c => (scores[c.id] || 0) <= 2);
+const adv = getAdvies(totaal);
+let t = `Op basis van de Multi Criteria Analyse scoort ${naam} ${totaal} van de maximaal 30 punten — advies: ${adv.label}. `;
+if (totaal >= 24) t += `Het platform kan worden ingezet als structureel communicatiekanaal, mits kerninformatie altijd ook via eigen kanalen (gemeentelijke website, nieuwsbrief) beschikbaar is.`;
+else if (totaal >= 18) t += `Inzet is mogelijk onder specifieke voorwaarden. Adresseer de aandachtspunten voordat het platform breed wordt ingezet en monitor periodiek of inzet nog aansluit bij de publieke opdracht.`;
+else if (totaal >= 12) t += `Overweeg een beperkte pilot voor één specifiek communicatiedoel. Evalueer streng en leg bevindingen vast.`;
+else t += `De risico's en beperkingen wegen zwaarder dan de potentiële voordelen. Een negatief besluit is traceerbaar te onderbouwen met dit kader.`;
+if (sterke.length > 0) t += ` Sterke punten: ${sterke.map(c => c.title).join(", ")}.`;
+if (zwakke.length > 0) t += ` Aandacht nodig voor: ${zwakke.map(c => c.title).join(", ")}.`;
+return t;
+}
+ 
+function watNuStappen(adv, naam, scores) {
+const zwakke = CRITERIA.filter(c => (scores[c.id] || 0) <= 2);
+if (adv.label === "Actief inzetten") return [
+{ icon: "✅", title: "Leg het besluit formeel vast", body: `Neem de keuze om ${naam} actief in te zetten op in het communicatiebeleid of een collegebesluit. Gebruik deze MCA als onderbouwing en sla het op bij het dossier communicatiebeleid.` },
+{ icon: "📋", title: "Werk een implementatieplan uit", body: "Definieer doelstellingen, tone-of-voice, publicatiefrequentie en wie verantwoordelijk is. Zorg dat kerninformatie altijd ook via eigen kanalen (gemeentelijke website, nieuwsbrief) beschikbaar is." },
+{ icon: "🔗", title: "Koppel aan eigen kanalen", body: "Volgens de gemeentelijke communicatiestrategie moet informatie op social media altijd terug te vinden zijn op eigen kanalen. Bouw dit in als vaste werkwijze." },
+{ icon: "📊", title: "Evalueer jaarlijks", body: "Toets het platform jaarlijks opnieuw via dit kader. Het socialmedialandschap verandert snel — wat vandaag werkt, kan morgen anders zijn." },
+];
+if (adv.label === "Voorwaardelijk inzetten") return [
+{ icon: "🔍", title: "Pak de aandachtspunten aan", body: zwakke.length > 0 ? `De lage scores op ${zwakke.map(c => c.title).join(" en ")} vragen om gerichte maatregelen. Bespreek dit met de jurist of privacy-officer voordat het platform breed ingezet wordt.` : "Formuleer heldere randvoorwaarden voordat inzet wordt uitgebreid." },
+{ icon: "🧪", title: "Start afgebakend", body: `Zet ${naam} in voor één specifiek communicatiedoel. Evalueer na drie maanden of bredere inzet verantwoord is en of het aansluit bij de publieke opdracht.` },
+{ icon: "📝", title: "Leg voorwaarden vast", body: "Welk type content? Welke doelgroep? Welke frequentie? Leg dit schriftelijk vast zodat collega's consistent handelen." },
+{ icon: "🔄", title: "Plan een hertoetsing", body: "Hertoets het platform na zes maanden of zodra platformbeleid, wet- en regelgeving of maatschappelijke context wijzigt." },
+];
+if (adv.label === "Pilot of experiment") return [
+{ icon: "⚠️", title: "Wees transparant over de risico's", body: `De score van ${naam} geeft reden tot terughoudendheid. Bespreek de bevindingen met management voordat wordt besloten tot inzet.` },
+{ icon: "🧪", title: "Beperk tot een pilot", body: "Als inzet toch gewenst is: één campagne, één doelgroep, vaste einddatum. Evalueer streng en documenteer wat je leert — zoals de Nijmeegse Snapchat-pilot rondom gemeenteraadsverkiezingen." },
+{ icon: "🔍", title: "Onderzoek alternatieven", body: "Zijn er andere platforms die hetzelfde communicatiedoel bereiken met minder risico's? Toets die via dit kader." },
+{ icon: "📅", title: "Hertoets over een jaar", body: "Platforms veranderen. Bluesky en Mastodon groeien mogelijk. Plan een hertoetsing over 12 maanden." },
+];
+return [
+{ icon: "🚫", title: "Documenteer het negatieve besluit", body: `De score van ${naam} rechtvaardigt geen inzet. Leg dit schriftelijk vast — inclusief MCA-uitkomst — zodat het besluit traceerbaar en uitlegbaar is richting management en bestuur.` },
+{ icon: "💬", title: "Communiceer de beslissing intern", body: "Informeer betrokkenen over het negatieve advies en de onderbouwing. Dit voorkomt dat het platform alsnog ad-hoc wordt ingezet door individuele medewerkers." },
+{ icon: "🔄", title: "Monitor externe ontwikkelingen", body: "Platforms veranderen hun beleid, veiligheidsmaatregelen of eigenaarschap. Hertoets bij significante wijzigingen — zoals nieuwe DSA-regelgeving of veranderingen in platformeigenaarschap." },
+{ icon: "🔍", title: "Zoek naar passende alternatieven", body: "Welk platform voldoet wél aan de criteria? Toets alternatieven via dit kader en sluit aan bij de landelijke ontwikkelingen (VNG, IBD)." },
+];
+}
+ 
+// ─── Radar Chart ──────────────────────────────────────────────────────────────
+function RadarChart({ scores, size = 240 }) {
+const cx = size / 2, cy = size / 2, r = size * 0.36;
+const n = CRITERIA.length;
+const angles = CRITERIA.map((_, i) => (2 * Math.PI * i) / n - Math.PI / 2);
+const pt = (score, i) => { const f = (score || 0) / 5; return [cx + r * f * Math.cos(angles[i]), cy + r * f * Math.sin(angles[i])]; };
+const grid = f => angles.map(a => [cx + r * f * Math.cos(a), cy + r * f * Math.sin(a)]);
+const poly = pts => pts.map(p => p.join(",")).join(" ");
+const dataPoints = CRITERIA.map((c, i) => pt(scores[c.id] || 0, i));
+return (
+<svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} style={{ display: "block", margin: "0 auto" }}>
+{[1,2,3,4,5].map(l => <polygon key={l} points={poly(grid(l/5))} fill={l===5 ? T.accentBg : "none"} stroke={T.borderDark} strokeWidth="1" />)}
+{angles.map((a, i) => <line key={i} x1={cx} y1={cy} x2={cx+r*Math.cos(a)} y2={cy+r*Math.sin(a)} stroke={T.borderDark} strokeWidth="1" />)}
+<polygon points={poly(dataPoints)} fill="rgba(30,58,95,0.12)" stroke={T.accent} strokeWidth="2" />
+{dataPoints.map((p, i) => <circle key={i} cx={p[0]} cy={p[1]} r="4" fill={T.accent} />)}
+{CRITERIA.map((c, i) => {
+const lx = cx + (r+22)*Math.cos(angles[i]);
+const ly = cy + (r+22)*Math.sin(angles[i]);
+const anchor = Math.cos(angles[i]) < -0.1 ? "end" : Math.cos(angles[i]) > 0.1 ? "start" : "middle";
+return <text key={i} x={lx} y={ly+4} textAnchor={anchor} fontSize="10" fill={T.slateMid} fontFamily="Georgia, serif">{c.short}</text>;
+})}
+</svg>
+);
+}
+ 
+// ─── Score Bar ────────────────────────────────────────────────────────────────
+function ScoreBar({ score }) {
+const col = score <= 2 ? "#c53030" : score <= 3 ? "#b7791f" : "#276749";
+return (
+<div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+<div style={{ flex: 1, height: 5, background: T.bgAlt, borderRadius: 3, overflow: "hidden" }}>
+<div style={{ width: `${(score/5)*100}%`, height: "100%", background: col, borderRadius: 3, transition: "width 0.4s ease" }} />
+</div>
+<span style={{ fontWeight: 700, fontSize: 13, color: col, minWidth: 28, textAlign: "right" }}>{score}/5</span>
+</div>
+);
+}
+ 
+// ─── Score Selector ───────────────────────────────────────────────────────────
+function ScoreSelector({ value, onChange }) {
+const [hov, setHov] = useState(0);
+const labels = { 1: "Onvoldoende", 2: "Matig", 3: "Voldoende", 4: "Goed", 5: "Uitstekend" };
+return (
+<div style={{ display: "flex", gap: 7, alignItems: "center", flexWrap: "wrap", justifyContent: "center" }}>
+{[1,2,3,4,5].map(n => {
+const active = n <= (hov || value);
+return (
+<button key={n} onClick={() => onChange(n)}
+onMouseEnter={() => setHov(n)} onMouseLeave={() => setHov(0)}
+title={labels[n]}
+style={{
+width: 38, height: 38,
+border: `2px solid ${active ? T.accent : T.borderDark}`,
+background: active ? T.accent : T.white,
+color: active ? T.white : T.slateLight,
+fontWeight: 700, fontSize: 15, cursor: "pointer", borderRadius: 2,
+fontFamily: "Georgia, serif", transition: "all 0.12s",
+}}
+>{n}</button>
+);
+})}
+{(hov || value) > 0 && (
+<span style={{ fontSize: 12, color: T.slateLight, fontStyle: "italic", marginLeft: 4 }}>{labels[hov || value]}</span>
+)}
+</div>
+);
+}
+ 
+// ─── Collapsible ──────────────────────────────────────────────────────────────
+function Collapsible({ title, children, defaultOpen = false, accent }) {
+const [open, setOpen] = useState(defaultOpen);
+return (
+<div style={{ border: `1px solid ${T.border}`, borderRadius: 2, overflow: "hidden", marginBottom: 3 }}>
+<button onClick={() => setOpen(!open)} style={{
+width: "100%", display: "flex", justifyContent: "space-between", alignItems: "center",
+padding: "14px 18px", background: open ? T.accentBg : T.bgCard,
+border: "none", cursor: "pointer", textAlign: "left",
+borderLeft: `3px solid ${accent || T.borderDark}`,
+}}>
+<span style={{ fontWeight: 600, fontSize: 14, color: T.text, fontFamily: "Georgia, serif" }}>{title}</span>
+<span style={{ color: T.slateLight, fontSize: 16, transition: "transform 0.2s", transform: open ? "rotate(180deg)" : "none", display: "inline-block" }}>▾</span>
+</button>
+{open && (
+<div style={{ padding: "16px 18px 18px", background: T.bgCard, borderLeft: `3px solid ${accent || T.borderDark}`, borderTop: `1px solid ${T.border}` }}>
+{children}
+</div>
+)}
+</div>
+);
+}
+ 
+// ─── Advies Card ──────────────────────────────────────────────────────────────
+function AdviesCard({ totaal }) {
+const adv = getAdvies(totaal);
+return (
+<div style={{ background: adv.bg, border: `1px solid ${adv.border}`, borderRadius: 2, padding: "18px 22px", textAlign: "center" }}>
+<div style={{ width: 14, height: 14, borderRadius: "50%", background: adv.dot, margin: "0 auto 10px" }} />
+<div style={{ fontWeight: 800, fontSize: 18, color: adv.textCol, fontFamily: "Georgia, serif" }}>{adv.label}</div>
+<div style={{ fontSize: 12, color: T.slateLight, marginTop: 6, fontStyle: "italic" }}>{totaal} van 30 punten</div>
+</div>
+);
+}
+ 
+// ─── Page Header ──────────────────────────────────────────────────────────────
+function PageHeader({ title, sub }) {
+return (
+<div style={{ marginBottom: 28, textAlign: "center" }}>
+<h1 style={{ margin: "0 0 8px", fontSize: 26, fontWeight: 800, color: T.text, fontFamily: "Georgia, serif", letterSpacing: "-0.5px" }}>{title}</h1>
+{sub && <p style={{ margin: 0, color: T.textMid, fontSize: 14, lineHeight: 1.7 }}>{sub}</p>}
+<div style={{ width: 36, height: 2, background: T.accent, margin: "14px auto 0" }} />
+</div>
+);
+}
+ 
+// ─── WELCOME MODAL ────────────────────────────────────────────────────────────
+function WelcomeModal({ onClose }) {
+const [activeTab, setActiveTab] = useState("over");
+const tabs = [
+{ id: "over", label: "Over dit project" },
+{ id: "hoe", label: "Hoe werkt de tool?" },
+{ id: "criteria", label: "De zes criteria" },
+];
+ 
+return (
+<div style={{
+position: "fixed", inset: 0, zIndex: 1000,
+background: "rgba(10,20,40,0.65)",
+backdropFilter: "blur(5px)",
+display: "flex", alignItems: "center", justifyContent: "center",
+padding: 24,
+fontFamily: "'Segoe UI', 'Helvetica Neue', Arial, sans-serif",
+}}>
+<div style={{
+background: T.bgCard, borderRadius: 6,
+boxShadow: "0 28px 80px rgba(0,0,0,0.22)",
+width: "100%", maxWidth: 660,
+maxHeight: "90vh",
+display: "flex", flexDirection: "column",
+overflow: "hidden",
+}}>
+{/* Header */}
+<div style={{
+background: T.accent,
+padding: "32px 32px 26px",
+textAlign: "center",
+position: "relative",
+overflow: "hidden",
+}}>
+<div style={{ position: "absolute", right: -40, top: -40, width: 180, height: 180, borderRadius: "50%", background: "rgba(255,255,255,0.05)", pointerEvents: "none" }} />
+<button onClick={onClose} style={{
+position: "absolute", top: 14, right: 16,
+background: "rgba(255,255,255,0.15)", border: "1px solid rgba(255,255,255,0.25)",
+width: 32, height: 32, borderRadius: "50%",
+cursor: "pointer", fontSize: 16, color: T.white,
+display: "flex", alignItems: "center", justifyContent: "center",
+}} title="Sluiten">×</button>
+<div style={{ position: "relative", zIndex: 1 }}>
+<div style={{ display: "inline-block", background: "rgba(255,255,255,0.18)", color: T.white, fontSize: 10, fontWeight: 700, letterSpacing: 2, textTransform: "uppercase", padding: "4px 14px", borderRadius: 2, marginBottom: 16 }}>
+Praktische beoordelingstool
+</div>
+<h2 style={{ margin: "0 0 12px", fontSize: 24, fontWeight: 900, color: T.white, fontFamily: "Georgia, serif", lineHeight: 1.2 }}>
+Afwegingskader social media<br />voor gemeenten
+</h2>
+<p style={{ margin: "0 auto", fontSize: 14, color: "rgba(255,255,255,0.8)", lineHeight: 1.8, maxWidth: 560 }}>
+Een instrument om nieuwe socialmediakanalen verantwoord te beoordelen op bereik, ethiek, juridische kaders en capaciteit.
+</p>
+</div>
+</div>
+ 
+{/* Stat strip */}
+<div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", borderBottom: `1px solid ${T.border}`, flexShrink: 0 }}>
+{[
+{ n: "6", label: "Criteria" },
+{ n: "30", label: "Max. punten" },
+{ n: "MCA", label: "Methodiek" },
+{ n: "~10", label: "Minuten" },
+].map((s, i) => (
+<div key={s.label} style={{ padding: "14px 10px", textAlign: "center", background: T.bg, borderRight: i < 3 ? `1px solid ${T.border}` : "none" }}>
+<div style={{ fontSize: 22, fontWeight: 900, color: T.accent, fontFamily: "Georgia, serif" }}>{s.n}</div>
+<div style={{ fontSize: 11, color: T.textMid, marginTop: 3 }}>{s.label}</div>
+</div>
+))}
+</div>
+ 
+{/* Tabs */}
+<div style={{ display: "flex", borderBottom: `1px solid ${T.border}`, flexShrink: 0, background: T.bgCard }}>
+{tabs.map(tab => (
+<button key={tab.id} onClick={() => setActiveTab(tab.id)} style={{
+flex: 1, padding: "11px 8px",
+background: activeTab === tab.id ? T.accentBg : "transparent",
+border: "none",
+borderBottom: activeTab === tab.id ? `2px solid ${T.accent}` : "2px solid transparent",
+color: activeTab === tab.id ? T.accent : T.textMid,
+fontWeight: activeTab === tab.id ? 700 : 400,
+fontSize: 13, cursor: "pointer", fontFamily: "inherit",
+transition: "all 0.12s",
+}}>{tab.label}</button>
+))}
+</div>
+ 
+{/* Scrollable content */}
+<div style={{ overflowY: "auto", flex: 1, padding: "22px 28px" }}>
+{activeTab === "over" && (
+<div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+<div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+{[
+{ icon: "🎓", title: "Doel van de tool", body: "Dit afwegingskader is ontwikkeld voor gemeenten in Nederland om nieuwe socialmediakanalen door de check te halen. Aan de hand van de uitkomst kan worden gekeken of dit een geschikt kanaal is binnen alle richtlijnen." },
+{ icon: "🔬", title: "Onderzoeksaanpak", body: "Gebaseerd op deskresearch, benchmarkanalyse, gesprekken en toetsing aan AVG, Archiefwet en WCAG." },
+{ icon: "⚖️", title: "MCA-methodiek", body: "Gebaseerd op Multi Criteria Analyse: alle zes criteria wegen gelijk, omdat publieke waarden, juridische kaders én communicatiedoelen als gelijkwaardig worden beschouwd." },
+{ icon: "🎯", title: "gemeentelijke communicatiestrategie", body: "De kern van het advies: een bewuste, gespreide en toekomstbestendige strategie waarbij bereik, publieke waarden en digitale onafhankelijkheid in balans zijn." },
+].map(c => (
+<div key={c.title} style={{ background: T.bg, border: `1px solid ${T.border}`, padding: "16px", textAlign: "center" }}>
+<div style={{ fontSize: 22, marginBottom: 8 }}>{c.icon}</div>
+<div style={{ fontWeight: 700, fontSize: 13, color: T.text, fontFamily: "Georgia, serif", marginBottom: 6 }}>{c.title}</div>
+<p style={{ margin: 0, fontSize: 12, color: T.textMid, lineHeight: 1.75 }}>{c.body}</p>
+</div>
+))}
+</div>
+</div>
+)}
+ 
+{activeTab === "hoe" && (
+<div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+<p style={{ margin: "0 0 6px", fontSize: 13, color: T.textMid, lineHeight: 1.8, textAlign: "center" }}>
+De tool begeleidt je stap voor stap door het afwegingskader. Vul de zes criteria in voor een platform en ontvang een onderbouwd advies.
+</p>
+{[
+{ nr: "01", title: "Kies een platform", body: "Typ de naam van het platform dat je wil beoordelen. Gebruik de vergelijkingspagina als referentie voor platforms die al in het rapport zijn geanalyseerd." },
+{ nr: "02", title: "Beoordeel de zes criteria", body: "Per criterium lees je de definitie en scorebeschrijvingen (1–5), direct gebaseerd op de bevindingen uit het rapport. Referentiescores helpen je te kalibreren." },
+{ nr: "03", title: "Bekijk je score en advies", body: "De tool berekent een totaalscore (max. 30) en geeft een van vier adviescategorieën, conform de MCA-methodiek uit het rapport." },
+{ nr: "04", title: "Lees het 'Wat nu?'-stappenplan", body: "Op basis van de gemeentelijke communicatiestrategie uit het rapport krijg je concrete vervolgstappen — van implementatieplan tot het documenteren van een negatief besluit." },
+{ nr: "05", title: "Vergelijk en verken", body: "De vergelijkingspagina toont indicatieve scores voor zes platforms die in het rapport zijn geanalyseerd, inclusief WhatsApp, Mastodon en TikTok." },
+].map(s => (
+<div key={s.nr} style={{ display: "flex", gap: 16, background: T.bg, border: `1px solid ${T.border}`, borderLeft: `4px solid ${T.accent}`, padding: "14px 18px", alignItems: "flex-start" }}>
+<div style={{ fontFamily: "Georgia, serif", fontWeight: 900, fontSize: 18, color: T.accent, minWidth: 32, lineHeight: 1, paddingTop: 2 }}>{s.nr}</div>
+<div style={{ textAlign: "left" }}>
+<div style={{ fontWeight: 700, fontSize: 13, color: T.text, fontFamily: "Georgia, serif", marginBottom: 4 }}>{s.title}</div>
+<p style={{ margin: 0, fontSize: 12, color: T.textMid, lineHeight: 1.75 }}>{s.body}</p>
+</div>
+</div>
+))}
+<div style={{ background: T.geelBg, border: `1px solid ${T.geelBorder}`, borderLeft: `4px solid #d69e2e`, padding: "13px 16px", marginTop: 4, textAlign: "center" }}>
+<span style={{ fontWeight: 700, fontSize: 12, color: T.geel }}>💡 Tip: </span>
+<span style={{ fontSize: 12, color: T.textMid }}>Betrek de jurist of privacy-officer bij de definitieve beslissing. De IBD (Informatiebeveiligingsdienst) heeft een gespreksstarter ontwikkeld die als aanvulling kan worden gebruikt.</span>
+</div>
+</div>
+)}
+ 
+{activeTab === "criteria" && (
+<div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+<p style={{ margin: "0 0 6px", fontSize: 13, color: T.textMid, lineHeight: 1.8, textAlign: "center" }}>
+De zes criteria zijn rechtstreeks ontleend aan de position paper en uitgewerkt op basis van de bevindingen in het rapport.
+</p>
+<div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+{CRITERIA.map(c => (
+<div key={c.id} style={{ background: T.bg, border: `1px solid ${T.border}`, borderTop: `3px solid ${T.accent}`, padding: "14px 16px", textAlign: "center" }}>
+<div style={{ fontFamily: "Georgia, serif", fontWeight: 900, fontSize: 11, color: T.accent, marginBottom: 4, textTransform: "uppercase", letterSpacing: 1 }}>{c.nr}</div>
+<div style={{ fontWeight: 700, fontSize: 13, color: T.text, fontFamily: "Georgia, serif", marginBottom: 6 }}>{c.title}</div>
+<p style={{ margin: 0, fontSize: 12, color: T.textMid, lineHeight: 1.7 }}>{c.definition}</p>
+</div>
+))}
+</div>
+</div>
+)}
+</div>
+ 
+{/* Footer CTA */}
+<div style={{ borderTop: `1px solid ${T.border}`, padding: "18px 28px", background: T.bg, display: "flex", alignItems: "center", justifyContent: "space-between", flexShrink: 0, gap: 12, flexWrap: "wrap" }}>
+<div style={{ fontSize: 12, color: T.slateLight, fontStyle: "italic" }}>
+Hilde van Oosten · Beoordelingen worden niet opgeslagen
+</div>
+<button onClick={onClose} style={{
+padding: "12px 28px", background: T.accent, color: T.white,
+border: "none", fontWeight: 700, fontSize: 14, cursor: "pointer",
+borderRadius: 2, fontFamily: "inherit",
+transition: "all 0.15s",
+}}
+onMouseEnter={e => { e.currentTarget.style.background = T.accentMid; }}
+onMouseLeave={e => { e.currentTarget.style.background = T.accent; }}
+>Open de tool →</button>
+</div>
+</div>
+</div>
+);
+}
+ 
+// ─── HOME ─────────────────────────────────────────────────────────────────────
+function HomePage({ setPage }) {
+return (
+<div>
+<div style={{ background: T.accent, borderRadius: 2, padding: "40px 36px 36px", marginBottom: 24, textAlign: "center", position: "relative", overflow: "hidden" }}>
+<div style={{ position: "absolute", right: -60, top: -60, width: 240, height: 240, borderRadius: "50%", background: "rgba(255,255,255,0.05)", pointerEvents: "none" }} />
+<div style={{ position: "relative", zIndex: 1, maxWidth: 560, margin: "0 auto" }}>
+<div style={{ fontSize: 11, color: "rgba(255,255,255,0.65)", letterSpacing: 2, textTransform: "uppercase", marginBottom: 14, fontWeight: 700 }}>
+Gemeentelijke communicatietool
+</div>
+<h1 style={{ margin: "0 0 16px", fontSize: 30, fontWeight: 900, color: T.white, fontFamily: "Georgia, serif", lineHeight: 1.2 }}>
+Verantwoord social media<br />gebruik voor gemeenten
+</h1>
+<p style={{ margin: "0 0 28px", fontSize: 15, color: "rgba(255,255,255,0.8)", lineHeight: 1.75 }}>
+Een praktisch instrument om nieuwe socialmediakanalen verantwoord te beoordelen binnen gemeentelijke richtlijnen.
+</p>
+<div style={{ display: "flex", gap: 10, flexWrap: "wrap", justifyContent: "center" }}>
+{[
+{ label: "Start beoordeling", page: "beoordelen", primary: true },
+{ label: "Vergelijk platformen", page: "vergelijk" },
+{ label: "Lees het rapport", page: "rapport" },
+].map(btn => (
+<button key={btn.page} onClick={() => setPage(btn.page)} style={{
+padding: "11px 22px",
+background: btn.primary ? T.white : "transparent",
+color: btn.primary ? T.accent : T.white,
+border: `2px solid ${T.white}`,
+fontWeight: 700, fontSize: 13, cursor: "pointer", borderRadius: 2,
+fontFamily: "inherit",
+}}>{btn.label}</button>
+))}
+</div>
+</div>
+</div>
+ 
+<div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 1, background: T.border, marginBottom: 24 }}>
+{[
+{ n: "6", label: "Beoordelingscriteria", sub: "Uit de position paper Nijmegen" },
+{ n: "30", label: "Max. puntentotaal", sub: "Gelijk gewogen criteria" },
+{ n: "3", label: "Strategische pijlers", sub: "gemeentelijke communicatiestrategie" },
+].map(s => (
+<div key={s.label} style={{ background: T.bgCard, padding: "20px 16px", textAlign: "center" }}>
+<div style={{ fontSize: 28, fontWeight: 900, color: T.accent, fontFamily: "Georgia, serif" }}>{s.n}</div>
+<div style={{ fontSize: 12, fontWeight: 600, color: T.text, marginTop: 6 }}>{s.label}</div>
+<div style={{ fontSize: 11, color: T.slateLight, marginTop: 3 }}>{s.sub}</div>
+</div>
+))}
+</div>
+ 
+<div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 1, background: T.border, marginBottom: 24 }}>
+{[
+{ title: "Aanleiding", body: "Gemeenten maken effectief gebruik van social media, maar missen vaak een expliciete ethische afweging bij kanaalkeuze. Bereik alleen is niet meer voldoende." },
+{ title: "gemeentelijke communicatiestrategie", body: "Drie pijlers: een ethisch afwegingskader, bewuste platformkeuze en spreiding, en toekomstige aanbevelingen voor jongerenbereik." },
+{ title: "Hoe werkt het?", body: "Vul per criterium een score in (1–5). De tool berekent een totaalscore en genereert automatisch een advies én vervolgstappen conform het rapport." },
+{ title: "Wat levert het op?", body: "Een traceerbaar en uitlegbaar besluit — richting management, bestuur of collega's — onderbouwd met de MCA-methode uit het afwegingskader." },
+].map(c => (
+<div key={c.title} style={{ background: T.bgCard, padding: "22px 20px", textAlign: "center", borderTop: `3px solid transparent`, transition: "border-color 0.12s" }}
+onMouseEnter={e => e.currentTarget.style.borderTopColor = T.accent}
+onMouseLeave={e => e.currentTarget.style.borderTopColor = "transparent"}
+>
+<div style={{ fontWeight: 700, fontSize: 14, color: T.text, fontFamily: "Georgia, serif", marginBottom: 8 }}>{c.title}</div>
+<div style={{ fontSize: 13, color: T.textMid, lineHeight: 1.7 }}>{c.body}</div>
+</div>
+))}
+</div>
+ 
+<div style={{ background: T.accentBg, border: `1px solid ${T.accentBorder}`, borderLeft: `4px solid ${T.accent}`, padding: "18px 22px", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 12 }}>
+<div style={{ textAlign: "center", flex: 1 }}>
+<div style={{ fontWeight: 700, fontSize: 15, color: T.text, fontFamily: "Georgia, serif" }}>Klaar om een platform te beoordelen?</div>
+<div style={{ fontSize: 13, color: T.textMid, marginTop: 4 }}>Een volledige beoordeling duurt gemiddeld 5–10 minuten.</div>
+</div>
+<button onClick={() => setPage("beoordelen")} style={{ padding: "11px 24px", background: T.accent, color: T.white, border: "none", fontWeight: 700, fontSize: 14, cursor: "pointer", borderRadius: 2, fontFamily: "inherit" }}>
+Start beoordeling →
+</button>
+</div>
+</div>
+);
+}
+ 
+// ─── BEOORDELEN ───────────────────────────────────────────────────────────────
+function BeoordelenPage() {
+const [naam, setNaam] = useState("");
+const [scores, setScores] = useState({});
+const [open, setOpen] = useState(null);
+const [step, setStep] = useState("invullen");
+ 
+const filled = Object.keys(scores).length;
+const totaal = getTotaal(scores);
+const adv = getAdvies(totaal);
+const handleReset = () => { setNaam(""); setScores({}); setStep("invullen"); setOpen(null); };
+ 
+if (step === "resultaat" || step === "watnow") {
+const sterke = CRITERIA.filter(c => (scores[c.id] || 0) >= 4);
+const zwakke = CRITERIA.filter(c => (scores[c.id] || 0) <= 2);
+const stappen = watNuStappen(adv, naam, scores);
+ 
+return (
+<div>
+<div style={{ background: T.accent, padding: "22px 26px", marginBottom: 20, display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 12 }}>
+<div style={{ textAlign: "center", flex: 1 }}>
+<div style={{ fontSize: 11, color: "rgba(255,255,255,0.65)", textTransform: "uppercase", letterSpacing: 1.5, fontWeight: 700, marginBottom: 6 }}>Beoordelingsresultaat</div>
+<h1 style={{ margin: 0, fontSize: 22, fontWeight: 900, color: T.white, fontFamily: "Georgia, serif" }}>{naam}</h1>
+<div style={{ fontSize: 12, color: "rgba(255,255,255,0.55)", marginTop: 4, fontStyle: "italic" }}>{new Date().toLocaleDateString("nl-NL")}</div>
+</div>
+<button onClick={handleReset} style={{ padding: "9px 18px", background: "rgba(255,255,255,0.15)", border: "1px solid rgba(255,255,255,0.3)", color: T.white, fontWeight: 600, fontSize: 13, cursor: "pointer", borderRadius: 2, fontFamily: "inherit" }}>
+↩ Nieuwe beoordeling
+</button>
+</div>
+ 
+<div style={{ display: "flex", gap: 1, background: T.border, marginBottom: 20 }}>
+{[{ id: "resultaat", label: "Uitkomst & scores" }, { id: "watnow", label: "Wat nu? →" }].map(tab => (
+<button key={tab.id} onClick={() => setStep(tab.id)} style={{
+flex: 1, padding: "13px 0", background: step === tab.id ? T.bgCard : T.bgAlt,
+border: "none", fontWeight: step === tab.id ? 700 : 400,
+color: step === tab.id ? T.accent : T.textMid,
+fontSize: 14, cursor: "pointer", fontFamily: "Georgia, serif",
+borderBottom: step === tab.id ? `3px solid ${T.accent}` : `3px solid transparent`,
+transition: "all 0.12s", textAlign: "center",
+}}>{tab.label}</button>
+))}
+</div>
+ 
+{step === "resultaat" && (
+<>
+<div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 16 }}>
+<div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+<AdviesCard totaal={totaal} />
+<div style={{ border: `1px solid ${T.border}`, padding: "16px 18px", background: T.bgCard, textAlign: "center" }}>
+<div style={{ fontSize: 11, fontWeight: 700, color: T.accent, textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 8 }}>Beleidsadvies</div>
+<p style={{ margin: 0, fontSize: 13, color: T.textMid, lineHeight: 1.85, fontStyle: "italic" }}>{beleidsadvies(naam, scores, totaal)}</p>
+</div>
+</div>
+<div style={{ border: `1px solid ${T.border}`, padding: 16, background: T.bgCard, display: "flex", alignItems: "center", justifyContent: "center" }}>
+<RadarChart scores={scores} size={200} />
+</div>
+</div>
+ 
+{(sterke.length > 0 || zwakke.length > 0) && (
+<div style={{ display: "grid", gridTemplateColumns: sterke.length && zwakke.length ? "1fr 1fr" : "1fr", gap: 12, marginBottom: 16 }}>
+{sterke.length > 0 && (
+<div style={{ background: "#f0fff4", border: "1px solid #9ae6b4", padding: "14px 16px", textAlign: "center" }}>
+<div style={{ fontSize: 11, fontWeight: 700, color: "#276749", textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 10 }}>Sterke punten</div>
+{sterke.map(c => (
+<div key={c.id} style={{ display: "flex", justifyContent: "space-between", marginBottom: 8, alignItems: "center" }}>
+<span style={{ fontSize: 13, color: T.text }}>{c.title}</span>
+<span style={{ fontWeight: 900, color: "#276749", fontSize: 17 }}>{scores[c.id]}</span>
+</div>
+))}
+</div>
+)}
+{zwakke.length > 0 && (
+<div style={{ background: "#fff5f5", border: "1px solid #feb2b2", padding: "14px 16px", textAlign: "center" }}>
+<div style={{ fontSize: 11, fontWeight: 700, color: "#742a2a", textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 10 }}>Aandachtspunten</div>
+{zwakke.map(c => (
+<div key={c.id} style={{ display: "flex", justifyContent: "space-between", marginBottom: 8, alignItems: "center" }}>
+<span style={{ fontSize: 13, color: T.text }}>{c.title}</span>
+<span style={{ fontWeight: 900, color: "#c53030", fontSize: 17 }}>{scores[c.id]}</span>
+</div>
+))}
+</div>
+)}
+</div>
+)}
+ 
+<div style={{ border: `1px solid ${T.border}`, padding: "18px 20px", background: T.bgCard, marginBottom: 16, textAlign: "center" }}>
+<div style={{ fontSize: 11, fontWeight: 700, color: T.text, textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 16 }}>Scoreverdeling per criterium</div>
+{CRITERIA.map(c => (
+<div key={c.id} style={{ marginBottom: 14 }}>
+<div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 5, justifyContent: "center" }}>
+<span style={{ fontSize: 10, fontWeight: 800, color: T.accent, minWidth: 24 }}>{c.nr}</span>
+<span style={{ fontSize: 13, color: T.text }}>{c.title}</span>
+</div>
+<ScoreBar score={scores[c.id] || 0} />
+</div>
+))}
+</div>
+ 
+<div onClick={() => setStep("watnow")} style={{ background: T.accentBg, border: `1px solid ${T.accentBorder}`, borderLeft: `4px solid ${T.accent}`, padding: "16px 20px", cursor: "pointer", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+<div style={{ textAlign: "center", flex: 1 }}>
+<div style={{ fontWeight: 700, fontSize: 15, color: T.text, fontFamily: "Georgia, serif" }}>Wat nu?</div>
+<div style={{ fontSize: 13, color: T.textMid, marginTop: 4 }}>Bekijk concrete vervolgstappen conform de gemeentelijke communicatiestrategie.</div>
+</div>
+<span style={{ fontSize: 22, color: T.accent }}>→</span>
+</div>
+</>
+)}
+ 
+{step === "watnow" && (
+<>
+<div style={{ background: adv.bg, border: `1px solid ${adv.border}`, padding: "14px 18px", marginBottom: 20, display: "flex", alignItems: "center", gap: 14, justifyContent: "center" }}>
+<div style={{ width: 12, height: 12, borderRadius: "50%", background: adv.dot, flexShrink: 0 }} />
+<div style={{ textAlign: "center" }}>
+<span style={{ fontWeight: 800, color: adv.textCol, fontFamily: "Georgia, serif", fontSize: 15 }}>{adv.label}</span>
+<span style={{ color: T.textMid, fontSize: 13, marginLeft: 10 }}>{naam} — {totaal}/30 punten</span>
+</div>
+</div>
+<div style={{ marginBottom: 20 }}>
+<div style={{ fontSize: 11, fontWeight: 700, color: T.text, textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 16, textAlign: "center" }}>Aanbevolen vervolgstappen</div>
+{stappen.map((s, i) => (
+<div key={i} style={{ display: "flex", gap: 16, marginBottom: 16, background: T.bgCard, border: `1px solid ${T.border}`, borderLeft: `4px solid ${T.accent}`, padding: "16px 18px" }}>
+<div style={{ fontSize: 22, flexShrink: 0, marginTop: 2 }}>{s.icon}</div>
+<div style={{ textAlign: "left" }}>
+<div style={{ fontWeight: 700, fontSize: 14, color: T.text, fontFamily: "Georgia, serif", marginBottom: 6 }}>{i+1}. {s.title}</div>
+<p style={{ margin: 0, fontSize: 13, color: T.textMid, lineHeight: 1.8 }}>{s.body}</p>
+</div>
+</div>
+))}
+</div>
+<div style={{ background: T.bgAlt, border: `1px solid ${T.border}`, padding: "16px 20px", marginBottom: 16, textAlign: "center" }}>
+<div style={{ fontSize: 11, fontWeight: 700, color: T.accent, textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 10 }}>Algemene aandachtspunten uit het rapport</div>
+{[
+"Zorg dat informatie op social media altijd ook beschikbaar is op eigen kanalen (gemeentelijke website, nieuwsbrief, wijkbladen).",
+"Betrek de jurist of privacy-officer bij de definitieve beslissing. De IBD-gespreksstarter is een nuttige aanvulling.",
+"Documenteer de uitkomst van deze MCA bij het dossier communicatiebeleid — traceerbaarheid is een kernprincipe van de gemeentelijke communicatiestrategie.",
+"Hertoets jaarlijks of direct na significante wijzigingen in platformbeleid, wet- en regelgeving of de publieke opinie.",
+].map((tip, i) => (
+<div key={i} style={{ display: "flex", gap: 10, marginBottom: 8, alignItems: "flex-start", justifyContent: "center" }}>
+<span style={{ color: T.accent, fontWeight: 700, fontSize: 13, flexShrink: 0, marginTop: 1 }}>—</span>
+<span style={{ fontSize: 13, color: T.textMid, lineHeight: 1.7, textAlign: "left" }}>{tip}</span>
+</div>
+))}
+</div>
+<div onClick={() => setStep("resultaat")} style={{ textAlign: "center", padding: "12px", color: T.accent, cursor: "pointer", fontSize: 13, fontWeight: 600 }}>
+← Terug naar uitkomst & scores
+</div>
+</>
+)}
+</div>
+);
+}
+ 
+return (
+<div>
+<PageHeader title="Platform beoordelen" sub="Beoordeel een socialmediaplatform op basis van de zes criteria uit de position paper." />
+<div style={{ border: `1px solid ${T.border}`, padding: "16px 18px", background: T.bgCard, textAlign: "center", marginBottom: 20 }}>
+<label style={{ display: "block", fontWeight: 600, fontSize: 12, color: T.text, marginBottom: 8, textTransform: "uppercase", letterSpacing: 0.5 }}>Naam platform *</label>
+<input value={naam} onChange={e => setNaam(e.target.value)} placeholder="Bijv. Bluesky, Threads, Spotify…"
+style={{ width: "60%", padding: "10px 12px", border: `1px solid ${T.borderDark}`, fontSize: 14, color: T.text, outline: "none", boxSizing: "border-box", fontFamily: "inherit", background: T.bg, borderRadius: 0, textAlign: "center" }} />
+</div>
+ 
+<div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
+<div style={{ fontSize: 13, color: T.slateLight, fontStyle: "italic" }}>{filled} van 6 criteria ingevuld</div>
+<div style={{ fontSize: 16, fontWeight: 900, color: T.accent, fontFamily: "Georgia, serif" }}>{totaal}/30</div>
+</div>
+<div style={{ height: 3, background: T.bgAlt, marginBottom: 18, overflow: "hidden", borderRadius: 2 }}>
+<div style={{ width: `${(filled/6)*100}%`, height: "100%", background: T.accent, transition: "width 0.3s ease" }} />
+</div>
+ 
+{CRITERIA.map(c => (
+<div key={c.id} style={{ border: `1px solid ${open === c.id ? T.accentBorder : T.border}`, marginBottom: 4, borderLeft: `4px solid ${scores[c.id] ? T.accent : T.borderDark}`, background: T.bgCard }}>
+<div onClick={() => setOpen(open === c.id ? null : c.id)}
+style={{ padding: "14px 18px", cursor: "pointer", display: "flex", justifyContent: "space-between", alignItems: "center", background: open === c.id ? T.accentBg : T.bgCard }}>
+<div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+<span style={{ fontSize: 10, fontWeight: 800, color: T.accent, minWidth: 28, fontFamily: "Georgia, serif" }}>{c.nr}</span>
+<div style={{ textAlign: "left" }}>
+<div style={{ fontWeight: 600, fontSize: 14, color: T.text }}>{c.title}</div>
+{scores[c.id] && <div style={{ fontSize: 11, color: T.slateLight, marginTop: 2, fontStyle: "italic" }}>Score: {scores[c.id]}/5</div>}
+</div>
+</div>
+<div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+{scores[c.id] && (
+<span style={{
+width: 26, height: 26, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center",
+fontWeight: 800, fontSize: 12,
+background: scores[c.id] >= 4 ? "#f0fff4" : scores[c.id] <= 2 ? "#fff5f5" : "#fffff0",
+color: scores[c.id] >= 4 ? "#276749" : scores[c.id] <= 2 ? "#742a2a" : "#744210",
+}}>{scores[c.id]}</span>
+)}
+<span style={{ color: T.slateLight, fontSize: 14 }}>{open === c.id ? "▲" : "▾"}</span>
+</div>
+</div>
+ 
+{open === c.id && (
+<div style={{ padding: "16px 24px 20px", borderTop: `1px solid ${T.border}`, textAlign: "center" }}>
+<div style={{ background: T.accentBg, padding: "12px 16px", marginBottom: 16, borderLeft: `2px solid ${T.accent}`, textAlign: "center" }}>
+<div style={{ fontSize: 11, fontWeight: 700, color: T.accent, textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 4 }}>Definitie</div>
+<p style={{ margin: 0, fontSize: 13, color: T.textMid, lineHeight: 1.75 }}>{c.definition}</p>
+</div>
+<div style={{ marginBottom: 16 }}>
+<div style={{ fontSize: 11, fontWeight: 700, color: T.text, textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 10 }}>Scorebeschrijvingen</div>
+{[1,2,3,4,5].map(n => (
+<div key={n} style={{ display: "flex", gap: 10, marginBottom: 7, alignItems: "flex-start", justifyContent: "center" }}>
+<span style={{ width: 20, height: 20, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, fontWeight: 800, fontSize: 11, background: n >= 4 ? "#f0fff4" : n <= 2 ? "#fff5f5" : "#fffff0", color: n >= 4 ? "#276749" : n <= 2 ? "#742a2a" : "#744210" }}>{n}</span>
+<span style={{ fontSize: 13, color: T.textMid, lineHeight: 1.5, textAlign: "left", maxWidth: 480 }}>{c.scores[n]}</span>
+</div>
+))}
+</div>
+<div style={{ marginBottom: c.voorbeelden.length > 0 ? 16 : 0 }}>
+<div style={{ fontSize: 11, fontWeight: 700, color: T.text, textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 10 }}>Kies een score</div>
+<ScoreSelector value={scores[c.id] || 0} onChange={v => setScores({...scores, [c.id]: v})} />
+</div>
+{c.voorbeelden.length > 0 && (
+<div style={{ background: T.bgAlt, borderLeft: `2px solid ${T.borderDark}`, padding: "10px 14px", marginTop: 4, textAlign: "center" }}>
+<div style={{ fontSize: 11, fontWeight: 700, color: T.slate, textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 8 }}>Referentiescores uit het rapport</div>
+<div style={{ display: "flex", gap: 8, flexWrap: "wrap", justifyContent: "center" }}>
+{c.voorbeelden.map(v => (
+<span key={v.naam} style={{ fontSize: 12, background: T.white, border: `1px solid ${T.border}`, padding: "3px 10px", color: T.text }}>{v.naam}: <strong>{v.score}</strong></span>
+))}
+</div>
+</div>
+)}
+{c.aandachtspunten.length > 0 && (
+<div style={{ background: T.geelBg, borderLeft: `2px solid #d69e2e`, padding: "10px 14px", marginTop: 12, textAlign: "center" }}>
+<div style={{ fontSize: 11, fontWeight: 700, color: T.geel, textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 6 }}>Aandachtspunten</div>
+{c.aandachtspunten.map((a, i) => (
+<p key={i} style={{ margin: "0 0 5px", fontSize: 12, color: T.textMid, lineHeight: 1.7 }}>— {a}</p>
+))}
+</div>
+)}
+</div>
+)}
+</div>
+))}
+ 
+<div style={{ marginTop: 20, textAlign: "center" }}>
+<button onClick={() => { if (naam.trim() && filled === 6) setStep("resultaat"); }}
+disabled={!naam.trim() || filled < 6}
+style={{
+padding: "13px 32px",
+background: (!naam.trim() || filled < 6) ? T.borderDark : T.accent,
+color: T.white, border: "none", fontWeight: 700, fontSize: 14,
+cursor: (!naam.trim() || filled < 6) ? "not-allowed" : "pointer",
+borderRadius: 2, fontFamily: "inherit",
+}}>
+{filled < 6 ? `Nog ${6-filled} ${6-filled===1 ? "criterium" : "criteria"} invullen` : "Bekijk beoordeling →"}
+</button>
+</div>
+</div>
+);
+}
+ 
+// ─── VERGELIJK ────────────────────────────────────────────────────────────────
+function VergelijkPage() {
+const [selected, setSelected] = useState(null);
+const sorted = [...VERGELIJK_PLATFORMEN].sort((a, b) => getTotaal(b.scores) - getTotaal(a.scores));
+ 
+return (
+<div>
+<PageHeader title="Vergelijk platformen" sub="Indicatieve scores voor platforms uit het afwegingskader. Gebruik de beoordelingstool voor een maatwerkbeoordeling." />
+ 
+<div style={{ background: T.accentBg, border: `1px solid ${T.accentBorder}`, borderLeft: `3px solid ${T.accent}`, padding: "12px 16px", marginBottom: 20, fontSize: 13, color: T.accentMid, textAlign: "center" }}>
+<strong>Toelichting:</strong> Deze scores zijn gebaseerd op de bevindingen, benchmarkanalyse en platformadviezen uit het afwegingskader. Ze zijn indicatief en kunnen per situatie afwijken.
+</div>
+ 
+<div style={{ border: `1px solid ${T.border}`, overflow: "hidden", marginBottom: 20 }}>
+<table style={{ width: "100%", borderCollapse: "collapse" }}>
+<thead>
+<tr style={{ background: T.accent }}>
+<th style={{ padding: "12px 16px", textAlign: "center", fontSize: 12, fontWeight: 700, color: T.white, fontFamily: "Georgia, serif" }}>Platform</th>
+{CRITERIA.map(c => <th key={c.id} style={{ padding: "12px 8px", fontSize: 10, fontWeight: 700, color: "rgba(255,255,255,0.8)", textAlign: "center", textTransform: "uppercase", letterSpacing: 0.5 }}>{c.short}</th>)}
+<th style={{ padding: "12px 16px", fontSize: 12, fontWeight: 700, color: T.white, textAlign: "center" }}>Totaal</th>
+<th style={{ padding: "12px 16px", fontSize: 12, fontWeight: 700, color: T.white, textAlign: "center" }}>Advies rapport</th>
+</tr>
+</thead>
+<tbody>
+{sorted.map((p, i) => {
+const t = getTotaal(p.scores);
+const adv = getAdvies(t);
+const isSel = selected?.naam === p.naam;
+return (
+<tr key={p.naam} onClick={() => setSelected(isSel ? null : p)}
+style={{ background: isSel ? T.accentBg : i%2===0 ? T.bgCard : T.bg, cursor: "pointer", borderBottom: `1px solid ${T.border}` }}>
+<td style={{ padding: "12px 16px", fontWeight: 700, fontSize: 14, color: T.text, textAlign: "center", borderLeft: isSel ? `3px solid ${T.accent}` : "3px solid transparent" }}>{p.naam}</td>
+{CRITERIA.map(c => {
+const s = p.scores[c.id];
+return (
+<td key={c.id} style={{ padding: "12px 8px", textAlign: "center" }}>
+<span style={{ display: "inline-flex", width: 24, height: 24, alignItems: "center", justifyContent: "center", fontWeight: 800, fontSize: 12, background: s >= 4 ? "#f0fff4" : s <= 2 ? "#fff5f5" : "#fffff0", color: s >= 4 ? "#276749" : s <= 2 ? "#742a2a" : "#744210" }}>{s}</span>
+</td>
+);
+})}
+<td style={{ padding: "12px 16px", textAlign: "center", fontWeight: 900, fontSize: 20, color: adv.dot, fontFamily: "Georgia, serif" }}>{t}</td>
+<td style={{ padding: "12px 12px", textAlign: "center" }}>
+<span style={{ fontSize: 10, fontWeight: 700, padding: "4px 9px", background: adv.bg, color: adv.textCol, border: `1px solid ${adv.border}`, textTransform: "uppercase", letterSpacing: 0.5, whiteSpace: "nowrap" }}>{p.advies}</span>
+</td>
+</tr>
+);
+})}
+</tbody>
+</table>
+</div>
+ 
+{selected ? (
+<div style={{ border: `1px solid ${T.accentBorder}`, borderLeft: `4px solid ${T.accent}` }}>
+<div style={{ background: T.accent, padding: "13px 18px", textAlign: "center" }}>
+<h2 style={{ margin: 0, fontSize: 16, fontWeight: 800, color: T.white, fontFamily: "Georgia, serif" }}>Detail: {selected.naam}</h2>
+</div>
+<div style={{ padding: "18px" }}>
+<div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 18 }}>
+<div>
+{CRITERIA.map(c => (
+<div key={c.id} style={{ marginBottom: 13, textAlign: "center" }}>
+<div style={{ display: "flex", gap: 8, marginBottom: 5, alignItems: "center", justifyContent: "center" }}>
+<span style={{ fontSize: 10, fontWeight: 800, color: T.accent, minWidth: 24 }}>{c.nr}</span>
+<span style={{ fontSize: 13, color: T.text }}>{c.title}</span>
+</div>
+<ScoreBar score={selected.scores[c.id]} />
+</div>
+))}
+</div>
+<div>
+<RadarChart scores={selected.scores} size={190} />
+<div style={{ marginTop: 12 }}><AdviesCard totaal={getTotaal(selected.scores)} /></div>
+</div>
+</div>
+<div style={{ marginTop: 16, background: T.accentBg, padding: "13px 16px", borderLeft: `2px solid ${T.accent}`, textAlign: "center" }}>
+<div style={{ fontSize: 11, fontWeight: 700, color: T.accent, textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 6 }}>Toelichting uit het rapport</div>
+<p style={{ margin: 0, fontSize: 13, color: T.textMid, lineHeight: 1.85, fontStyle: "italic" }}>{selected.toelichting}</p>
+</div>
+</div>
+</div>
+) : (
+<div style={{ textAlign: "center", padding: "18px", fontSize: 13, color: T.slateLight, border: `1px dashed ${T.borderDark}`, fontStyle: "italic" }}>
+Klik op een rij voor een gedetailleerde scoreverdeling en toelichting uit het rapport
+</div>
+)}
+</div>
+);
+}
+ 
+// ─── OVER ─────────────────────────────────────────────────────────────────────
+function OverPage() {
+return (
+<div style={{ maxWidth: 720, margin: "0 auto" }}>
+<PageHeader title="Over het afwegingskader" sub="Achtergrond, onderzoeksverantwoording en methodologie" />
+{[
+{ title: "Aanleiding en probleemstelling", accent: T.accent, body: `Gemeenten maken effectief gebruik van Instagram, Facebook, LinkedIn, X en YouTube en werken vaak met een contentstrategie. Toch zijn er drie knelpunten: jongeren worden nauwelijks bereikt, er is sprake van afhankelijkheid van commerciële platforms, en een expliciete ethische afweging bij kanaalkeuze ontbreekt.\n\nDe centrale vraag uit het afwegingskader luidt: "Hoe kunnen gemeenten social media effectief én verantwoord inzetten?" Dit afwegingskader geeft invulling aan de eerste pijler van de gemeentelijke communicatiestrategie.` },
+{ title: "Onderzoeksopzet", body: `Het kader is ontwikkeld op basis van:\n\n— Mediaonderzoek en bestaande kanaaldata\n— Contentstrategie 2024 voor Instagram, Facebook, LinkedIn, X en YouTube\n— Position paper 2026, besproken met de burgemeester\n— Benchmarkanalyse van 8 gemeenten: Arnhem, Breda, Groningen, Haarlem, Amsterdam, Zutphen, Den Bosch en Bergen op Zoom\n— Telefonische gesprekken met Amsterdam, Zutphen en Bergen op Zoom\n— Gesprekken met medewerkers van de afdeling Communicatie\n— Deskresearch naar overheidsrichtlijnen (AVG, Archiefwet, WCAG, VNG, IBD, Rijksoverheid)\n— Newcom Nationaal Social Media Onderzoek 2026\n\nAlle bevindingen zijn verwerkt in een SWOT-analyse en confrontatiematrix, waaruit vier zwaarwegende thema's kwamen: afhankelijkheid van platforms, risico's voor publieke waarden, ethische kwetsbaarheid en de jongerenkloof.` },
+{ title: "De gemeentelijke communicatiestrategie", accent: T.accent, body: `Het centrale advies is de gemeentelijke communicatiestrategie, gericht op drie doelen:\n\n— Het behouden van bereik\n— Het waarborgen van publieke waarden\n— Het verminderen van afhankelijkheid van commerciële platforms\n\nDe strategie bestaat uit drie pijlers:\n\n1. Ontwikkel een ethisch afwegingskader (dit instrument)\n2. Bewuste platformkeuze en spreiding — per platform een concreet advies\n3. Toekomstige aanbevelingen voor jongerenbereik via co-creatie, samenwerking met HAN/RU/ROC en alternatieve kanalen\n\nDe kracht van de strategie zit in het bieden van houvast bij veranderingen: door te spreiden over eigen kanalen én externe platforms blijven gemeenten flexibel.` },
+{ title: "MCA-methodiek", body: `Dit instrument is gebaseerd op een Multi Criteria Analyse (MCA): een bewezen methode voor besluitvorming waarbij meerdere factoren tegelijk worden meegewogen.\n\nDe zes criteria zijn rechtstreeks ontleend aan de position paper. Alle criteria worden gelijk gewogen, omdat uit het onderzoek geen aanleiding bleek om één criterium structureel zwaarder te laten wegen. Publieke waarden, juridische kaders én communicatiedoelen gelden als gelijkwaardig.` },
+{ title: "Privacy en gegevens", body: `Dit instrument slaat geen beoordelingen op en deelt geen gegevens. Alle ingevulde scores zijn uitsluitend zichtbaar in de huidige browsersessie.\n\nHet instrument is bedoeld voor intern gebruik binnen gemeenten en andere gemeentelijke organisaties.` },
+].map(s => (
+<Collapsible key={s.title} title={s.title} defaultOpen={true} accent={s.accent || T.borderDark}>
+<p style={{ margin: 0, fontSize: 14, lineHeight: 1.9, color: T.textMid, whiteSpace: "pre-line", textAlign: "center" }}>{s.body}</p>
+</Collapsible>
+))}
+</div>
+);
+}
+ 
+// ─── KENNISBANK ───────────────────────────────────────────────────────────────
+function KennisbankPage() {
+return (
+<div style={{ maxWidth: 720, margin: "0 auto" }}>
+<PageHeader title="Kennisbank" sub="Uitgebreide toelichting per criterium — gebaseerd op de bevindingen uit het afwegingskader" />
+{CRITERIA.map(c => (
+<div key={c.id} style={{ marginBottom: 4 }}>
+<Collapsible title={`${c.nr} — ${c.title}`} accent={T.accent}>
+<div style={{ display: "grid", gap: 16, textAlign: "center" }}>
+{[{ label: "Definitie", body: c.definition }, { label: "Onderbouwing (uit het rapport)", body: c.waarom }].map(s => (
+<div key={s.label}>
+<div style={{ fontSize: 11, fontWeight: 700, color: T.accent, textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 5 }}>{s.label}</div>
+<p style={{ margin: 0, fontSize: 13, color: T.textMid, lineHeight: 1.8 }}>{s.body}</p>
+</div>
+))}
+<div>
+<div style={{ fontSize: 11, fontWeight: 700, color: T.accent, textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 10 }}>Scorebeschrijvingen</div>
+{[1,2,3,4,5].map(n => (
+<div key={n} style={{ display: "flex", gap: 10, marginBottom: 7, alignItems: "flex-start", justifyContent: "center" }}>
+<span style={{ width: 20, height: 20, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, fontWeight: 800, fontSize: 11, background: n >= 4 ? "#f0fff4" : n <= 2 ? "#fff5f5" : "#fffff0", color: n >= 4 ? "#276749" : n <= 2 ? "#742a2a" : "#744210" }}>{n}</span>
+<span style={{ fontSize: 13, color: T.textMid, lineHeight: 1.6, textAlign: "left", maxWidth: 460 }}>{c.scores[n]}</span>
+</div>
+))}
+</div>
+{c.voorbeelden.length > 0 && (
+<div>
+<div style={{ fontSize: 11, fontWeight: 700, color: T.accent, textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 8 }}>Referentiescores uit het rapport</div>
+<div style={{ display: "flex", gap: 8, flexWrap: "wrap", justifyContent: "center" }}>
+{c.voorbeelden.map(v => (
+<div key={v.naam} style={{ border: `1px solid ${T.border}`, padding: "8px 14px", textAlign: "center", minWidth: 85, background: T.bgCard }}>
+<div style={{ fontSize: 11, color: T.slateLight }}>{v.naam}</div>
+<div style={{ fontSize: 20, fontWeight: 900, color: v.score >= 4 ? "#276749" : v.score <= 2 ? "#c53030" : "#b7791f", marginTop: 4, fontFamily: "Georgia, serif" }}>{v.score}</div>
+</div>
+))}
+</div>
+</div>
+)}
+{c.aandachtspunten.length > 0 && (
+<div style={{ background: T.geelBg, borderLeft: `2px solid #d69e2e`, padding: "10px 14px", textAlign: "center" }}>
+<div style={{ fontSize: 11, fontWeight: 700, color: T.geel, textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 7 }}>Aandachtspunten uit het rapport</div>
+{c.aandachtspunten.map((a, i) => (
+<p key={i} style={{ margin: "0 0 5px", fontSize: 13, color: T.textMid, lineHeight: 1.7 }}>— {a}</p>
+))}
+</div>
+)}
+</div>
+</Collapsible>
+</div>
+))}
+</div>
+);
+}
+ 
+// ─── RAPPORT ──────────────────────────────────────────────────────────────────
+function RapportPage() {
+return (
+<div style={{ maxWidth: 720, margin: "0 auto" }}>
+<div style={{ background: T.accent, padding: "30px 32px", marginBottom: 20, textAlign: "center", position: "relative", overflow: "hidden" }}>
+<div style={{ position: "absolute", right: -40, top: -40, width: 180, height: 180, borderRadius: "50%", background: "rgba(255,255,255,0.05)", pointerEvents: "none" }} />
+<div style={{ fontSize: 11, color: "rgba(255,255,255,0.65)", letterSpacing: 2, textTransform: "uppercase", fontWeight: 700, marginBottom: 12 }}>Voor gemeenten</div>
+<h1 style={{ margin: "0 0 8px", fontSize: 24, fontWeight: 900, color: T.white, fontFamily: "Georgia, serif" }}>Managementsamenvatting</h1>
+<div style={{ color: "rgba(255,255,255,0.7)", fontSize: 13, fontStyle: "italic" }}>Adviesrapport social media — {new Date().getFullYear()}</div>
+</div>
+ 
+{[
+{ nr: "01", title: "Aanleiding en probleemstelling",
+body: `Social media spelen een belangrijke rol in de communicatie tussen gemeenten en inwoners. Tegelijkertijd staat het gebruik van social media steeds meer onder druk door maatschappelijke discussies over privacy, desinformatie, digitale afhankelijkheid en de impact op gebruikers.\n\nDit vraagt om een heroverweging van de huidige socialmediastrategie. De centrale vraag luidt: "Hoe kunnen gemeenten hun socialmediastrategie optimaliseren om op een verantwoorde en effectieve manier te communiceren met hun doelgroepen?"` },
+{ nr: "02", title: "Huidige situatie",
+body: `Veel gemeenten zijn actief op meerdere socialmediakanalen: Instagram, Facebook, LinkedIn, X en YouTube. De contentstrategie (2024) onderscheidt vier centrale contentdoelen: informeren, activeren, inspireren en participeren.\n\nDe doelgroep 25-65 jaar wordt goed bereikt. De doelgroep onder 25 jaar wordt met de huidige kanalen echter nauwelijks bereikt.\n\nDaarnaast hebben gemeenten eigen communicatiemiddelen: website (gemeentelijke website), wekelijkse nieuwsbrief, wijksocials op Facebook, gemeentepagina in De Brug, wijkbladen, participatieplatform Onze Stad, schermen in wijkcentra en fysieke communicatiemiddelen.` },
+{ nr: "03", title: "Belangrijkste bevindingen",
+body: `Uit de benchmarkanalyse van 8 gemeenten (Arnhem, Breda, Groningen, Haarlem, Amsterdam, Zutphen, Den Bosch, Bergen op Zoom) komen de volgende bevindingen:\n\n— Amsterdam is de enige gemeente actief op TikTok (jongerencommunicatie, co-creatie) en Mastodon (alternatief voor X)\n— Zutphen en de gemeenteraad van Nijmegen experimenteerden met Snapchat voor jongerenbereik: groot bereik, maar lagere kijkduur\n— Den Bosch en Bergen op Zoom experimenteren succesvol met WhatsApp-kanalen\n— Bluesky wordt door Arnhem, Breda en Groningen gevolgd maar nauwelijks actief gebruikt\n\nUit het Newcom Nationaal Social Media Onderzoek 2026 blijkt dat 2,6 miljoen Nederlanders zich ongelukkiger voelen door social media. Het nieuwe kabinet werkt aan een Europese minimumleeftijd van 15 jaar voor sociale media.\n\nDe confrontatiematrix wijst vier zwaarwegende thema's aan: afhankelijkheid van platforms, risico's voor publieke waarden, ethische kwetsbaarheid en de jongerenkloof.` },
+{ nr: "04", title: "De gemeentelijke communicatiestrategie",
+body: `Het advies introduceert de gemeentelijke communicatiestrategie met drie pijlers:\n\nPijler 1 — Ethisch afwegingskader\nToets elk nieuw platform op de zes criteria uit de position paper: nabijheid en bereik, publieke opdracht, wettelijke kaders, digitale soevereiniteit, ethische aspecten en impact op de afdeling Communicatie.\n\nPijler 2 — Bewuste platformkeuze en spreiding\nSpreid aanwezigheid over meerdere kanalen. Concrete adviezen: Instagram en Facebook actief houden, X kritisch heroverwegen, Mastodon onderzoeken als doelgroep van X migreert, TikTok niet inzetten vanwege privacy en ethische risico's, WhatsApp Kanaal overwegen.\n\nPijler 3 — Toekomstige aanbevelingen\nJongeren bereiken via co-creatie met studenten (HAN, RU, ROC), samenwerkingen met onderwijs en jongerenwerk, en verkenning van alternatieve formats zoals podcasts en evenementen.` },
+{ nr: "05", title: "Kernprincipes",
+body: `De drie kernwaarden gelden bij alle overwegingen:\n\n— Nabij: bereikbaar en dichtbij voor alle inwoners\n— Verantwoord: ethisch en juridisch correct handelen\n— Betrouwbaar: transparante en consistente informatievoorziening\n\nBelangrijkste praktische richtlijn: informatie die via social media wordt gedeeld, moet altijd ook beschikbaar zijn op eigen kanalen. Zo blijven gemeenten onafhankelijk van platformbeslissingen buiten hun invloed.` },
+].map(s => (
+<div key={s.nr} style={{ marginBottom: 4 }}>
+<Collapsible title={`${s.nr} — ${s.title}`} defaultOpen={true} accent={T.accent}>
+<p style={{ margin: 0, fontSize: 13, lineHeight: 1.95, color: T.textMid, whiteSpace: "pre-line", textAlign: "center" }}>{s.body}</p>
+</Collapsible>
+</div>
+))}
+ 
+<div style={{ background: T.bgAlt, border: `1px solid ${T.border}`, padding: "14px 18px", marginTop: 12, textAlign: "center" }}>
+<div style={{ fontSize: 12, color: T.slateLight, fontStyle: "italic" }}>Afwegingskader Social Media · Versie 1.0 · {new Date().toLocaleDateString("nl-NL")}</div>
+</div>
+</div>
+);
+}
+ 
+// ─── Navigation ───────────────────────────────────────────────────────────────
+const NAV = [
+{ id: "home", label: "Home" },
+{ id: "beoordelen", label: "Platform beoordelen" },
+{ id: "vergelijk", label: "Vergelijk platformen" },
+{ id: "over", label: "Over het kader" },
+{ id: "kennisbank", label: "Kennisbank" },
+{ id: "rapport", label: "Adviesrapport" },
+];
+ 
+// ─── App ──────────────────────────────────────────────────────────────────────
+function App() {
+const [page, setPage] = useState("home");
+const [showModal, setShowModal] = useState(true);
+ 
+const renderPage = () => {
+switch (page) {
+case "home": return <HomePage setPage={setPage} />;
+case "beoordelen": return <BeoordelenPage />;
+case "vergelijk": return <VergelijkPage />;
+case "over": return <OverPage />;
+case "kennisbank": return <KennisbankPage />;
+case "rapport": return <RapportPage />;
+default: return <HomePage setPage={setPage} />;
+}
+};
+ 
+return (
+<div style={{ display: "flex", minHeight: "100vh", background: T.bg, fontFamily: "'Segoe UI', 'Helvetica Neue', Arial, sans-serif" }}>
+{showModal && <WelcomeModal onClose={() => setShowModal(false)} />}
+ 
+{/* Sidebar */}
+<div style={{ width: 252, background: T.accent, flexShrink: 0, display: "flex", flexDirection: "column", position: "sticky", top: 0, height: "100vh", overflow: "auto" }}>
+<div style={{ padding: "26px 22px 20px", borderBottom: "1px solid rgba(255,255,255,0.12)", textAlign: "center" }}>
+<div style={{ fontFamily: "Georgia, serif", fontWeight: 900, fontSize: 14, color: T.white, marginBottom: 4, lineHeight: 1.4 }}>
+Afwegingskader<br />Social Media
+</div>
+<div style={{ width: 28, height: 2, background: "rgba(255,255,255,0.4)", margin: "10px auto 10px" }} />
+<div style={{ fontSize: 11, color: "rgba(255,255,255,0.6)", lineHeight: 1.6 }}>
+Voor gemeenten
+</div>
+</div>
+ 
+<nav style={{ flex: 1, padding: "10px 0" }}>
+{NAV.map(item => {
+const active = page === item.id;
+return (
+<button key={item.id} onClick={() => setPage(item.id)}
+style={{
+width: "100%", display: "flex", alignItems: "center", justifyContent: "center",
+padding: "12px 22px",
+background: active ? "rgba(255,255,255,0.15)" : "transparent",
+border: "none",
+borderLeft: `3px solid ${active ? T.white : "transparent"}`,
+color: active ? T.white : "rgba(255,255,255,0.65)",
+fontWeight: active ? 700 : 400, fontSize: 13, textAlign: "center",
+cursor: "pointer", transition: "all 0.12s", fontFamily: "inherit",
+borderBottom: "1px solid rgba(255,255,255,0.06)",
+}}
+onMouseEnter={e => { if (!active) { e.currentTarget.style.background = "rgba(255,255,255,0.08)"; e.currentTarget.style.color = T.white; } }}
+onMouseLeave={e => { if (!active) { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "rgba(255,255,255,0.65)"; } }}
+>
+{item.label}
+</button>
+);
+})}
+</nav>
+ 
+<div style={{ padding: "16px 22px", borderTop: "1px solid rgba(255,255,255,0.12)", textAlign: "center" }}>
+<div style={{ fontSize: 12, color: "rgba(255,255,255,0.8)", fontWeight: 600, marginBottom: 4 }}>Hilde van Oosten</div>
+<div style={{ fontSize: 11, color: "rgba(255,255,255,0.45)", lineHeight: 1.7, fontStyle: "italic" }}>
+Beoordelingen worden niet opgeslagen.<br />
+Versie 1.0 — {new Date().getFullYear()}
+</div>
+</div>
+</div>
+ 
+{/* Main */}
+<div style={{ flex: 1, display: "flex", flexDirection: "column", minWidth: 0 }}>
+<div style={{ background: T.bgCard, borderBottom: `1px solid ${T.border}`, padding: "0 30px", height: 46, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+<div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+<span style={{ fontSize: 11, color: T.slateLight }}>Afwegingskader Social Media</span>
+<span style={{ color: T.borderDark, fontSize: 13 }}>›</span>
+<span style={{ fontSize: 12, color: T.accent, fontWeight: 600 }}>{NAV.find(n => n.id === page)?.label}</span>
+</div>
+<button onClick={() => setShowModal(true)} style={{ fontSize: 11, color: T.accent, background: "none", border: `1px solid ${T.accentBorder}`, padding: "4px 12px", cursor: "pointer", fontFamily: "inherit", borderRadius: 2, fontWeight: 600 }}>
+? Uitleg
+</button>
+</div>
+ 
+<div style={{ flex: 1, padding: "28px 32px", maxWidth: 940, width: "100%", margin: "0 auto", boxSizing: "border-box" }}>
+{renderPage()}
+</div>
+</div>
+</div>
+);
+}
+ 
+
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+  </script>
+</body>
+</html>
