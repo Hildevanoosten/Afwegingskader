@@ -90,7 +90,7 @@ voorbeelden: [
 { naam: "X", score: 3 }, { naam: "TikTok", score: 3 },
 ],
 aandachtspunten: [
-"Uit de contentstrategie 2024 blijkt dat de doelgroep onder 25 jaar met de huidige kanalen nauwelijks bereikt wordt.",
+"Uit deskresearch is gebleken dat meerdere gemeenten moeite hebben met het bereiken van jongeren. Hoe hiermee omgegaan wordt is per gemeente verschillend.",
 "Overweeg demografische data bij de beoordeling — het Newcom Mediaonderzoek 2026 biedt actuele cijfers.",
 ],
 },
@@ -110,10 +110,7 @@ voorbeelden: [
 { naam: "LinkedIn", score: 3 }, { naam: "YouTube", score: 3 },
 { naam: "X", score: 2 },
 ],
-aandachtspunten: [
-"LinkedIn is uitsluitend geschikt voor arbeidsmarktcommunicatie en profilering — niet voor communicatie richting inwoners.",
-"X wordt alleen nog zinvol ingezet voor persberichten richting pers en journalisten.",
-],
+aandachtspunten: [],
 },
 {
 id: "juridisch", nr: "03", title: "Wettelijke en bestuurlijke kaders", short: "Juridisch",
@@ -134,7 +131,7 @@ voorbeelden: [
 aandachtspunten: [
 "TikTok is een Chinese app: het Rijk raadt gebruik op werkapparaten af vanwege verhoogde risico's op spionage en ongeautoriseerde toegang.",
 "Meta (Facebook/Instagram) gebruikt openbare gemeentecontent voor AI-training zonder expliciete toestemming — dit is strijdig met het principe van doelbinding.",
-"Signal biedt weinig mogelijkheden tot archivering en past daarmee niet bij gemeentelijke communicatieverplichtingen.",
+"Signal biedt weinig mogelijkheden tot archivering en past daarmee verminderd bij gemeentelijke communicatieverplichtingen.",
 ],
 },
 {
@@ -154,9 +151,7 @@ voorbeelden: [
 { naam: "Mastodon", score: 5 }, { naam: "gemeentelijke website", score: 5 },
 ],
 aandachtspunten: [
-"De position paper adviseert bewust te spreiden over meerdere kanalen en niet één platform bepalend te laten zijn voor bereikbaarheid.",
-"Amsterdam zette Mastodon in als alternatief nadat X werd verlaten. De overheid beheert een eigen Mastodon-server.",
-"Investeer in eigen kanalen: website, nieuwsbrief, wijkbladen en participatieplatform Onze Stad.",
+"Het adviesrapport adviseert bewust te spreiden over meerdere kanalen en niet één platform bepalend te laten zijn voor bereikbaarheid.",
 ],
 },
 {
@@ -467,7 +462,7 @@ Praktische beoordelingstool
 Afwegingskader social media voor gemeenten
 </h2>
 {!isMobile && <p style={{ margin: "0 auto", fontSize: 14, color: "rgba(255,255,255,0.8)", lineHeight: 1.8, maxWidth: 560 }}>
-Een instrument om nieuwe socialmediakanalen verantwoord te beoordelen op bereik, ethiek, juridische kaders en capaciteit.
+Een instrument om nieuwe socialmediakanalen te beoordelen op bereik, ethiek, juridische kaders en capaciteit.
 </p>}
 </div>
 </div>
@@ -534,7 +529,7 @@ De tool begeleidt je stap voor stap door het afwegingskader. Vul de zes criteria
 </p>
 {[
 { nr: "01", title: "Kies een platform", body: "Typ de naam van het platform dat je wil beoordelen. Gebruik de vergelijkingspagina als referentie voor platforms die al in het rapport zijn geanalyseerd." },
-{ nr: "02", title: "Beoordeel de zes criteria", body: "Per criterium lees je de definitie en scorebeschrijvingen (1–5), direct gebaseerd op de bevindingen uit het rapport. Referentiescores helpen je te kalibreren." },
+{ nr: "02", title: "Beoordeel de zes criteria", body: "Per criterium lees je de definitie en scorebeschrijvingen (1–5), direct gebaseerd op de bevindingen uit het rapport. Referentiescores helpen je te vergelijken." },
 { nr: "03", title: "Bekijk je score en advies", body: "De tool berekent een totaalscore (max. 30) en geeft een van vier adviescategorieën, conform de MCA-methodiek uit het rapport." },
 { nr: "04", title: "Lees het 'Wat nu?'-stappenplan", body: "Op basis van de gemeentelijke communicatiestrategie uit het rapport krijg je concrete vervolgstappen — van implementatieplan tot het documenteren van een negatief besluit." },
 { nr: "05", title: "Vergelijk en verken", body: "De vergelijkingspagina toont indicatieve scores voor zes platforms die in het rapport zijn geanalyseerd, inclusief WhatsApp, Mastodon en TikTok." },
@@ -557,8 +552,7 @@ De tool begeleidt je stap voor stap door het afwegingskader. Vul de zes criteria
 {activeTab === "criteria" && (
 <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
 <p style={{ margin: "0 0 6px", fontSize: 13, color: T.textMid, lineHeight: 1.8, textAlign: "center" }}>
-De zes criteria zijn rechtstreeks ontleend aan de position paper en uitgewerkt op basis van de bevindingen in het rapport.
-</p>
+De zes criteria zijn afgeleid uit het adviesrapport en de confrontatiematrix die in het rapport zijn opgesteld.</p>
 <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: 10 }}>
 {CRITERIA.map(c => (
 <div key={c.id} style={{ background: T.bg, border: `1px solid ${T.border}`, borderTop: `3px solid ${T.accent}`, padding: "14px 16px", textAlign: "center" }}>
@@ -630,11 +624,10 @@ width: isMobile ? "100%" : "auto",
 </div>
 </div>
  
-<div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(3,1fr)", gap: 1, background: T.border, marginBottom: 24 }}>
+<div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(2,1fr)", gap: 1, background: T.border, marginBottom: 24 }}>
 {[
 { n: "6", label: "Beoordelingscriteria", sub: "Zes gelijk gewogen criteria" },
 { n: "30", label: "Max. puntentotaal", sub: "Gelijk gewogen criteria" },
-{ n: "3", label: "Strategische pijlers", sub: "Gemeentelijke communicatiestrategie" },
 ].map(s => (
 <div key={s.label} style={{ background: T.bgCard, padding: "20px 16px", textAlign: "center" }}>
 <div style={{ fontSize: 28, fontWeight: 900, color: T.accent, fontFamily: "Georgia, serif" }}>{s.n}</div>
@@ -647,7 +640,6 @@ width: isMobile ? "100%" : "auto",
 <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: 1, background: T.border, marginBottom: 24 }}>
 {[
 { title: "Aanleiding", body: "Gemeenten maken effectief gebruik van social media, maar missen vaak een expliciete ethische afweging bij kanaalkeuze. Bereik alleen is niet meer voldoende." },
-{ title: "gemeentelijke communicatiestrategie", body: "Drie pijlers: een ethisch afwegingskader, bewuste platformkeuze en spreiding, en toekomstige aanbevelingen voor jongerenbereik." },
 { title: "Hoe werkt het?", body: "Vul per criterium een score in (1–5). De tool berekent een totaalscore en genereert automatisch een advies én vervolgstappen conform het rapport." },
 { title: "Wat levert het op?", body: "Een traceerbaar en uitlegbaar besluit — richting management, bestuur of collega's — onderbouwd met de MCA-methode uit het afwegingskader." },
 ].map(c => (
@@ -1025,8 +1017,8 @@ return (
 <div style={{ maxWidth: 720, margin: "0 auto" }}>
 <PageHeader title="Over het afwegingskader" sub="Achtergrond, onderzoeksverantwoording en methodologie" />
 {[
-{ title: "Aanleiding en probleemstelling", accent: T.accent, body: `Gemeenten maken effectief gebruik van Instagram, Facebook, LinkedIn, X en YouTube en werken vaak met een contentstrategie. Toch zijn er drie knelpunten: jongeren worden nauwelijks bereikt, er is sprake van afhankelijkheid van commerciële platforms, en een expliciete ethische afweging bij kanaalkeuze ontbreekt.\n\nDe centrale vraag uit het afwegingskader luidt: "Hoe kunnen gemeenten social media effectief én verantwoord inzetten?" Dit afwegingskader geeft invulling aan de eerste pijler van de gemeentelijke communicatiestrategie.` },
-{ title: "Onderzoeksopzet", body: `Het kader is ontwikkeld op basis van:\n\n— Mediaonderzoek en bestaande kanaaldata\n— Contentstrategie 2024 voor Instagram, Facebook, LinkedIn, X en YouTube\n— Position paper gemeente Nijmegen 2026\n— Benchmarkanalyse\n— Verschillende gesprekken\n— Deskresearch naar overheidsrichtlijnen (AVG, Archiefwet, WCAG, VNG, IBD, Rijksoverheid)\n— Newcom Nationaal Social Media Onderzoek 2026\n\nAlle bevindingen zijn verwerkt in een SWOT-analyse en confrontatiematrix, waaruit vier zwaarwegende thema's kwamen: afhankelijkheid van platforms, risico's voor publieke waarden, ethische kwetsbaarheid en de jongerenkloof.` },
+{ title: "Aanleiding en probleemstelling", accent: T.accent, body: `Gemeenten maken effectief gebruik van Instagram, Facebook, LinkedIn, X en YouTube en werken vaak met een contentstrategie. Toch zijn er drie knelpunten: jongeren worden nauwelijks bereikt, er is sprake van afhankelijkheid van commerciële platforms, en een expliciete ethische afweging bij kanaalkeuze ontbreekt.\n\nDe centrale vraag uit het afwegingskader luidt: "Hoe kunnen gemeenten social media effectief én verantwoord inzetten?"` },
+{ title: "Onderzoeksopzet", body: `Het kader is ontwikkeld op basis van:\n\n— Mediaonderzoek en bestaande kanaaldata\n— Contentstrategie gemeente Nijmegen\n— Position paper gemeente Nijmegen 2026\n— Benchmarkanalyse\n— Verschillende gesprekken\n— Deskresearch naar overheidsrichtlijnen (AVG, Archiefwet, WCAG, VNG, IBD, Rijksoverheid)\n— Newcom Nationaal Social Media Onderzoek 2026\n\nAlle bevindingen zijn verwerkt in een SWOT-analyse en confrontatiematrix, waaruit vier zwaarwegende thema's kwamen: afhankelijkheid van platforms, risico's voor publieke waarden, ethische kwetsbaarheid en de jongerenkloof. Vanuit deze confrontatiematrix zijn de zes beoordelingscriteria van dit afwegingskader afgeleid.` },
 { title: "MCA-methodiek", body: `Dit instrument is gebaseerd op een Multi Criteria Analyse (MCA): een bewezen methode voor besluitvorming waarbij meerdere factoren tegelijk worden meegewogen.\n\nDe zes criteria zijn rechtstreeks ontleend aan de position paper. Alle criteria worden gelijk gewogen, omdat uit het onderzoek geen aanleiding bleek om één criterium structureel zwaarder te laten wegen. Publieke waarden, juridische kaders én communicatiedoelen gelden als gelijkwaardig.` },
 { title: "Privacy en gegevens", body: `Dit instrument slaat geen beoordelingen op en deelt geen gegevens. Alle ingevulde scores zijn uitsluitend zichtbaar in de huidige browsersessie.\n\nHet instrument is bedoeld voor intern gebruik binnen gemeenten en andere gemeentelijke organisaties.` },
 ].map(s => (
@@ -1272,4 +1264,3 @@ ReactDOM.createRoot(document.getElementById('root')).render(<App />);
   </script>
 </body>
 </html>
- 
