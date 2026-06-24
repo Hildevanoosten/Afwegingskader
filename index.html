@@ -93,7 +93,7 @@ aandachtspunten: [
 },
 {
 id: "opdracht", nr: "02", title: "Publieke opdracht en functionaliteit", short: "Functionaliteit",
-definition: "In welke mate ondersteunt het platform de publieke taak van gemeenten? De contentstrategie 2024 onderscheidt vier centrale contentdoelen: informeren, activeren, inspireren en participeren.",
+definition: "In welke mate ondersteunt het platform de publieke taak van gemeenten? Er worden vier centrale contentdoelen onderscheiden: informeren, activeren, inspireren en participeren.",
 waarom: "De publieke opdracht van gemeenten omvat bereikbaarheid en nabijheid voor inwoners, betrouwbare informatievoorziening, ondersteuning van dienstverlening en participatie. Een platform dat hier niet aan bijdraagt, is geen efficiënte inzet van publieke middelen.",
 scores: {
 1: "Draagt nauwelijks bij aan de vier gemeentelijke contentdoelen.",
@@ -153,7 +153,7 @@ aandachtspunten: [
 },
 {
 id: "ethisch", nr: "05", title: "Maatschappelijke en ethische aspecten", short: "Ethisch",
-definition: "Welke maatschappelijke gevolgen en risico's brengt het platform met zich mee voor inwoners van Nijmegen? Denk aan privacy, inclusiviteit, desinformatie, verslavend ontwerp en online veiligheid — met extra aandacht voor jongeren.",
+definition: "Welke maatschappelijke gevolgen en risico's brengt het platform met zich mee voor inwoners? Denk aan privacy, inclusiviteit, desinformatie, verslavend ontwerp en online veiligheid — met extra aandacht voor jongeren.",
 waarom: "Uit het Newcom Nationaal Social Media Onderzoek 2026 blijkt dat 2,6 miljoen Nederlanders zich ongelukkiger voelen door social mediagebruik, voornamelijk jongeren (30%). Het kabinet werkt aan een Europese minimumleeftijd van 15 jaar. Als publieke instantie hebben gemeenten een voorbeeldfunctie.",
 scores: {
 1: "Grote maatschappelijke risico's: aantoonbare negatieve impact op mentale gezondheid, privacy of desinformatie.",
@@ -213,7 +213,7 @@ toelichting: "Effectief voor nieuws en wijkcommunicatie (30-65 jaar). Nooit als 
 naam: "WhatsApp Kanaal",
 advies: "Overwegen",
 scores: { bereik: 4, opdracht: 3, juridisch: 3, soevereiniteit: 2, ethisch: 3, capaciteit: 4 },
-toelichting: "Den Bosch en Bergen op Zoom experimenteren succesvol. Laagdrempelig en dicht bij inwoners.",
+toelichting: "Laagdrempelig en dicht bij inwoners.",
 },
 {
 naam: "X (Twitter)",
@@ -272,7 +272,7 @@ if (adv.label === "Voorwaardelijk inzetten") return [
 ];
 if (adv.label === "Pilot of experiment") return [
 { icon: "⚠️", title: "Wees transparant over de risico's", body: `De score van ${naam} geeft reden tot terughoudendheid. Bespreek de bevindingen met management voordat wordt besloten tot inzet.` },
-{ icon: "🧪", title: "Beperk tot een pilot", body: "Als inzet toch gewenst is: één campagne, één doelgroep, vaste einddatum. Evalueer streng en documenteer wat je leert — zoals de Nijmeegse Snapchat-pilot rondom gemeenteraadsverkiezingen." },
+{ icon: "🧪", title: "Beperk tot een pilot", body: "Als inzet toch gewenst is: één campagne, één doelgroep, vaste einddatum. Evalueer streng en documenteer wat je leert — zoals een Snapchat-pilot rondom gemeenteraadsverkiezingen." },
 { icon: "🔍", title: "Onderzoek alternatieven", body: "Zijn er andere platforms die hetzelfde communicatiedoel bereiken met minder risico's? Toets die via dit kader." },
 { icon: "📅", title: "Hertoets over een jaar", body: "Platforms veranderen. Bluesky en Mastodon groeien mogelijk. Plan een hertoetsing over 12 maanden." },
 ];
@@ -965,7 +965,7 @@ return (
 <PageHeader title="Over het afwegingskader" sub="Achtergrond, onderzoeksverantwoording en methodologie" />
 {[
 { title: "Aanleiding en probleemstelling", accent: T.accent, body: `Gemeenten maken effectief gebruik van Instagram, Facebook, LinkedIn, X en YouTube en werken vaak met een contentstrategie. Toch zijn er drie knelpunten: jongeren worden nauwelijks bereikt, er is sprake van afhankelijkheid van commerciële platforms, en een expliciete ethische afweging bij kanaalkeuze ontbreekt.\n\nDe centrale vraag uit het afwegingskader luidt: "Hoe kunnen gemeenten social media effectief én verantwoord inzetten?"` },
-{ title: "Onderzoeksopzet", body: `Het kader is ontwikkeld op basis van:\n\n— Mediaonderzoek en bestaande kanaaldata\n— Contentstrategie gemeente Nijmegen\n— Position paper gemeente Nijmegen 2026\n— Benchmarkanalyse\n— Verschillende gesprekken\n— Deskresearch naar overheidsrichtlijnen (AVG, Archiefwet, WCAG, VNG, IBD, Rijksoverheid)\n— Newcom Nationaal Social Media Onderzoek 2026\n\nAlle bevindingen zijn verwerkt in een SWOT-analyse en confrontatiematrix, waaruit vier zwaarwegende thema's kwamen: afhankelijkheid van platforms, risico's voor publieke waarden, ethische kwetsbaarheid en de jongerenkloof. Vanuit deze confrontatiematrix zijn de zes beoordelingscriteria van dit afwegingskader afgeleid.` },
+{ title: "Onderzoeksopzet", body: `Het kader is ontwikkeld op basis van:\n\n— Mediaonderzoek en bestaande kanaaldata\n— Gemeentelijke contentstrategie\n— Position paper 2026\n— Benchmarkanalyse\n— Verschillende gesprekken\n— Deskresearch naar overheidsrichtlijnen (AVG, Archiefwet, WCAG, VNG, IBD, Rijksoverheid)\n— Newcom Nationaal Social Media Onderzoek 2026\n\nAlle bevindingen zijn verwerkt in een SWOT-analyse en confrontatiematrix, waaruit vier zwaarwegende thema's kwamen: afhankelijkheid van platforms, risico's voor publieke waarden, ethische kwetsbaarheid en de jongerenkloof. Vanuit deze confrontatiematrix zijn de zes beoordelingscriteria van dit afwegingskader afgeleid.` },
 { title: "MCA-methodiek", body: `Dit instrument is gebaseerd op een Multi Criteria Analyse (MCA): een bewezen methode voor besluitvorming waarbij meerdere factoren tegelijk worden meegewogen.\n\nDe zes criteria zijn rechtstreeks ontleend aan de position paper. Alle criteria worden gelijk gewogen, omdat uit het onderzoek geen aanleiding bleek om één criterium structureel zwaarder te laten wegen. Publieke waarden, juridische kaders én communicatiedoelen gelden als gelijkwaardig.` },
 { title: "Privacy en gegevens", body: `Dit instrument slaat geen beoordelingen op en deelt geen gegevens. Alle ingevulde scores zijn uitsluitend zichtbaar in de huidige browsersessie.\n\nHet instrument is bedoeld voor intern gebruik binnen gemeenten en andere gemeentelijke organisaties.` },
 ].map(s => (
