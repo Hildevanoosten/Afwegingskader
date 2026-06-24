@@ -4,10 +4,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Afwegingskader Social Media</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700;900&display=swap" rel="stylesheet">
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     html, body, #root { min-height: 100%; }
-    body { overflow-x: hidden; -webkit-text-size-adjust: 100%; }
+    body { overflow-x: hidden; -webkit-text-size-adjust: 100%; font-family: 'Source Sans 3', 'Source Sans Pro', Arial, sans-serif; color: #000000; }
     button, input { max-width: 100%; font-family: inherit; }
     table { max-width: 100%; }
     img { max-width: 100%; }
@@ -26,22 +29,22 @@
 
 const { useEffect, useState } = React;
 const T = {
-bg: "#f4f6f9",
-bgAlt: "#eaecf2",
+bg: "#f7f7f7",
+bgAlt: "#ebebeb",
 bgCard: "#ffffff",
-accent: "#1e3a5f",
-accentMid: "#2e5385",
-accentLight: "#d6e4f7",
-accentBorder:"#a8c4e0",
-accentBg: "#eef4fb",
-slate: "#4a5568",
-slateMid: "#718096",
-slateLight: "#a0aec0",
-border: "#dde3ed",
-borderDark: "#b8c4d4",
-text: "#1a202c",
-textMid: "#4a5568",
-textLight: "#718096",
+accent: "#a80a20",
+accentMid: "#8a0819",
+accentLight: "#f5d0d5",
+accentBorder:"#e0a0a8",
+accentBg: "#fdf0f1",
+slate: "#333333",
+slateMid: "#555555",
+slateLight: "#888888",
+border: "#dddddd",
+borderDark: "#bbbbbb",
+text: "#000000",
+textMid: "#222222",
+textLight: "#555555",
 white: "#ffffff",
 groen: "#276749",
 groenBg: "#f0fff4",
@@ -331,7 +334,7 @@ border: `2px solid ${active ? T.accent : T.borderDark}`,
 background: active ? T.accent : T.white,
 color: active ? T.white : T.slateLight,
 fontWeight: 700, fontSize: 15, cursor: "pointer", borderRadius: 2,
-fontFamily: "Georgia, serif", transition: "all 0.12s",
+fontFamily: "\"Oranda BT\", \"Oranda\", Georgia, serif", transition: "all 0.12s",
 }}
 >{n}</button>
 );
@@ -352,7 +355,7 @@ padding: "14px 18px", background: open ? T.accentBg : T.bgCard,
 border: "none", cursor: "pointer", textAlign: "left",
 borderLeft: `3px solid ${accent || T.borderDark}`,
 }}>
-<span style={{ fontWeight: 600, fontSize: 14, color: T.text, fontFamily: "Georgia, serif" }}>{title}</span>
+<span style={{ fontWeight: 600, fontSize: 14, color: T.text, fontFamily: "\"Oranda BT\", \"Oranda\", Georgia, serif" }}>{title}</span>
 <span style={{ color: T.slateLight, fontSize: 16, transition: "transform 0.2s", transform: open ? "rotate(180deg)" : "none", display: "inline-block" }}>▾</span>
 </button>
 {open && (
@@ -368,7 +371,7 @@ const adv = getAdvies(totaal);
 return (
 <div style={{ background: adv.bg, border: `1px solid ${adv.border}`, borderRadius: 2, padding: "18px 22px", textAlign: "center" }}>
 <div style={{ width: 14, height: 14, borderRadius: "50%", background: adv.dot, margin: "0 auto 10px" }} />
-<div style={{ fontWeight: 800, fontSize: 18, color: adv.textCol, fontFamily: "Georgia, serif" }}>{adv.label}</div>
+<div style={{ fontWeight: 800, fontSize: 18, color: adv.textCol, fontFamily: "\"Oranda BT\", \"Oranda\", Georgia, serif" }}>{adv.label}</div>
 <div style={{ fontSize: 12, color: T.slateLight, marginTop: 6, fontStyle: "italic" }}>{totaal} van 30 punten</div>
 </div>
 );
@@ -377,7 +380,7 @@ function PageHeader({ title, sub }) {
 const isMobile = useIsMobile();
 return (
 <div style={{ marginBottom: 28, textAlign: "center" }}>
-<h1 style={{ margin: "0 0 8px", fontSize: isMobile ? 22 : 26, fontWeight: 800, color: T.text, fontFamily: "Georgia, serif", letterSpacing: 0, lineHeight: 1.2 }}>{title}</h1>
+<h1 style={{ margin: "0 0 8px", fontSize: isMobile ? 22 : 26, fontWeight: 800, color: T.text, fontFamily: "\"Oranda BT\", \"Oranda\", Georgia, serif", letterSpacing: 0, lineHeight: 1.2 }}>{title}</h1>
 {sub && <p style={{ margin: 0, color: T.textMid, fontSize: 14, lineHeight: 1.7 }}>{sub}</p>}
 <div style={{ width: 36, height: 2, background: T.accent, margin: "14px auto 0" }} />
 </div>
@@ -398,7 +401,7 @@ background: "rgba(10,20,40,0.65)",
 backdropFilter: "blur(5px)",
 display: "flex", alignItems: isMobile ? "flex-end" : "center", justifyContent: "center",
 padding: isMobile ? 0 : 24,
-fontFamily: "'Segoe UI', 'Helvetica Neue', Arial, sans-serif",
+fontFamily: "'Source Sans 3', 'Source Sans Pro', Arial, sans-serif",
 }}>
 <div style={{
 background: T.bgCard,
@@ -410,7 +413,7 @@ display: "flex", flexDirection: "column",
 overflow: "hidden",
 }}>
 <div style={{
-background: T.accent,
+background: "#111111",
 padding: isMobile ? "12px 18px 12px" : "32px 32px 26px",
 textAlign: "center",
 position: "relative",
@@ -429,7 +432,7 @@ display: "flex", alignItems: "center", justifyContent: "center",
 {!isMobile && <div style={{ display: "inline-block", background: "rgba(255,255,255,0.18)", color: T.white, fontSize: 10, fontWeight: 700, letterSpacing: 2, textTransform: "uppercase", padding: "4px 14px", borderRadius: 2, marginBottom: 16 }}>
 Praktische beoordelingstool
 </div>}
-<h2 style={{ margin: isMobile ? 0 : "0 0 12px", fontSize: isMobile ? 17 : 24, fontWeight: 900, color: T.white, fontFamily: "Georgia, serif", lineHeight: 1.2 }}>
+<h2 style={{ margin: isMobile ? 0 : "0 0 12px", fontSize: isMobile ? 17 : 24, fontWeight: 900, color: T.white, fontFamily: "\"Oranda BT\", \"Oranda\", Georgia, serif", lineHeight: 1.2 }}>
 Afwegingskader social media voor gemeenten
 </h2>
 {!isMobile && <p style={{ margin: "0 auto", fontSize: 14, color: "rgba(255,255,255,0.8)", lineHeight: 1.8, maxWidth: 560 }}>
@@ -445,7 +448,7 @@ Een instrument om nieuwe socialmediakanalen te beoordelen op bereik, ethiek, jur
 { n: "~10", label: "Minuten" },
 ].map((s, i) => (
 <div key={s.label} style={{ padding: "14px 10px", textAlign: "center", background: T.bg, borderRight: i < 3 ? `1px solid ${T.border}` : "none" }}>
-<div style={{ fontSize: 22, fontWeight: 900, color: T.accent, fontFamily: "Georgia, serif" }}>{s.n}</div>
+<div style={{ fontSize: 22, fontWeight: 900, color: T.accent, fontFamily: "\"Oranda BT\", \"Oranda\", Georgia, serif" }}>{s.n}</div>
 <div style={{ fontSize: 11, color: T.textMid, marginTop: 3 }}>{s.label}</div>
 </div>
 ))}
@@ -479,7 +482,7 @@ transition: "all 0.12s",
 ].map(c => (
 <div key={c.title} style={{ background: T.bg, border: `1px solid ${T.border}`, padding: "16px", textAlign: "center" }}>
 <div style={{ fontSize: 22, marginBottom: 8 }}>{c.icon}</div>
-<div style={{ fontWeight: 700, fontSize: 13, color: T.text, fontFamily: "Georgia, serif", marginBottom: 6 }}>{c.title}</div>
+<div style={{ fontWeight: 700, fontSize: 13, color: T.text, fontFamily: "\"Oranda BT\", \"Oranda\", Georgia, serif", marginBottom: 6 }}>{c.title}</div>
 <p style={{ margin: 0, fontSize: 12, color: T.textMid, lineHeight: 1.75 }}>{c.body}</p>
 </div>
 ))}
@@ -499,9 +502,9 @@ De tool begeleidt je stap voor stap door het afwegingskader. Vul de zes criteria
 { nr: "05", title: "Vergelijk en verken", body: "De vergelijkingspagina toont indicatieve scores voor zes platforms die in het rapport zijn geanalyseerd, inclusief WhatsApp, Mastodon en TikTok." },
 ].map(s => (
 <div key={s.nr} style={{ display: "flex", gap: 16, background: T.bg, border: `1px solid ${T.border}`, borderLeft: `4px solid ${T.accent}`, padding: "14px 18px", alignItems: "flex-start" }}>
-<div style={{ fontFamily: "Georgia, serif", fontWeight: 900, fontSize: 18, color: T.accent, minWidth: 32, lineHeight: 1, paddingTop: 2 }}>{s.nr}</div>
+<div style={{ fontFamily: "\"Oranda BT\", \"Oranda\", Georgia, serif", fontWeight: 900, fontSize: 18, color: T.accent, minWidth: 32, lineHeight: 1, paddingTop: 2 }}>{s.nr}</div>
 <div style={{ textAlign: "left" }}>
-<div style={{ fontWeight: 700, fontSize: 13, color: T.text, fontFamily: "Georgia, serif", marginBottom: 4 }}>{s.title}</div>
+<div style={{ fontWeight: 700, fontSize: 13, color: T.text, fontFamily: "\"Oranda BT\", \"Oranda\", Georgia, serif", marginBottom: 4 }}>{s.title}</div>
 <p style={{ margin: 0, fontSize: 12, color: T.textMid, lineHeight: 1.75 }}>{s.body}</p>
 </div>
 </div>
@@ -519,8 +522,8 @@ De zes criteria zijn afgeleid uit het adviesrapport en de confrontatiematrix die
 <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: 10 }}>
 {CRITERIA.map(c => (
 <div key={c.id} style={{ background: T.bg, border: `1px solid ${T.border}`, borderTop: `3px solid ${T.accent}`, padding: "14px 16px", textAlign: "center" }}>
-<div style={{ fontFamily: "Georgia, serif", fontWeight: 900, fontSize: 11, color: T.accent, marginBottom: 4, textTransform: "uppercase", letterSpacing: 1 }}>{c.nr}</div>
-<div style={{ fontWeight: 700, fontSize: 13, color: T.text, fontFamily: "Georgia, serif", marginBottom: 6 }}>{c.title}</div>
+<div style={{ fontFamily: "\"Oranda BT\", \"Oranda\", Georgia, serif", fontWeight: 900, fontSize: 11, color: T.accent, marginBottom: 4, textTransform: "uppercase", letterSpacing: 1 }}>{c.nr}</div>
+<div style={{ fontWeight: 700, fontSize: 13, color: T.text, fontFamily: "\"Oranda BT\", \"Oranda\", Georgia, serif", marginBottom: 6 }}>{c.title}</div>
 <p style={{ margin: 0, fontSize: 12, color: T.textMid, lineHeight: 1.7 }}>{c.definition}</p>
 </div>
 ))}
@@ -551,13 +554,13 @@ function HomePage({ setPage }) {
 const isMobile = useIsMobile();
 return (
 <div>
-<div style={{ background: T.accent, borderRadius: 2, padding: isMobile ? "30px 18px 26px" : "40px 36px 36px", marginBottom: 24, textAlign: "center", position: "relative", overflow: "hidden" }}>
+<div style={{ background: "#111111", borderRadius: 2, padding: isMobile ? "30px 18px 26px" : "40px 36px 36px", marginBottom: 24, textAlign: "center", position: "relative", overflow: "hidden" }}>
 <div style={{ position: "absolute", right: -60, top: -60, width: 240, height: 240, borderRadius: "50%", background: "rgba(255,255,255,0.05)", pointerEvents: "none" }} />
 <div style={{ position: "relative", zIndex: 1, maxWidth: 560, margin: "0 auto" }}>
 <div style={{ fontSize: 11, color: "rgba(255,255,255,0.65)", letterSpacing: 2, textTransform: "uppercase", marginBottom: 14, fontWeight: 700 }}>
 Gemeentelijke communicatietool
 </div>
-<h1 style={{ margin: "0 0 16px", fontSize: isMobile ? 26 : 30, fontWeight: 900, color: T.white, fontFamily: "Georgia, serif", lineHeight: 1.2 }}>
+<h1 style={{ margin: "0 0 16px", fontSize: isMobile ? 26 : 30, fontWeight: 900, color: T.white, fontFamily: "\"Oranda BT\", \"Oranda\", Georgia, serif", lineHeight: 1.2 }}>
 Verantwoord social media<br />gebruik voor gemeenten
 </h1>
 <p style={{ margin: "0 0 28px", fontSize: 15, color: "rgba(255,255,255,0.8)", lineHeight: 1.75 }}>
@@ -588,7 +591,7 @@ width: isMobile ? "100%" : "auto",
 { n: "30", label: "Max. puntentotaal", sub: "Gelijk gewogen criteria" },
 ].map(s => (
 <div key={s.label} style={{ background: T.bgCard, padding: "20px 16px", textAlign: "center" }}>
-<div style={{ fontSize: 28, fontWeight: 900, color: T.accent, fontFamily: "Georgia, serif" }}>{s.n}</div>
+<div style={{ fontSize: 28, fontWeight: 900, color: T.accent, fontFamily: "\"Oranda BT\", \"Oranda\", Georgia, serif" }}>{s.n}</div>
 <div style={{ fontSize: 12, fontWeight: 600, color: T.text, marginTop: 6 }}>{s.label}</div>
 <div style={{ fontSize: 11, color: T.slateLight, marginTop: 3 }}>{s.sub}</div>
 </div>
@@ -605,7 +608,7 @@ width: isMobile ? "100%" : "auto",
 onMouseEnter={e => e.currentTarget.style.borderTopColor = T.accent}
 onMouseLeave={e => e.currentTarget.style.borderTopColor = "transparent"}
 >
-<div style={{ fontWeight: 700, fontSize: 14, color: T.text, fontFamily: "Georgia, serif", marginBottom: 8 }}>{c.title}</div>
+<div style={{ fontWeight: 700, fontSize: 14, color: T.text, fontFamily: "\"Oranda BT\", \"Oranda\", Georgia, serif", marginBottom: 8 }}>{c.title}</div>
 <div style={{ fontSize: 13, color: T.textMid, lineHeight: 1.7 }}>{c.body}</div>
 </div>
 ))}
@@ -616,14 +619,14 @@ style={{ background: T.bgCard, padding: "22px 20px", textAlign: "center", border
 onMouseEnter={e => e.currentTarget.style.borderTopColor = T.accent}
 onMouseLeave={e => e.currentTarget.style.borderTopColor = "transparent"}
 >
-<div style={{ fontWeight: 700, fontSize: 14, color: T.text, fontFamily: "Georgia, serif", marginBottom: 8 }}>Wat levert het op?</div>
+<div style={{ fontWeight: 700, fontSize: 14, color: T.text, fontFamily: "\"Oranda BT\", \"Oranda\", Georgia, serif", marginBottom: 8 }}>Wat levert het op?</div>
 <div style={{ fontSize: 13, color: T.textMid, lineHeight: 1.7 }}>Een traceerbaar en uitlegbaar besluit — richting management, bestuur of collega's — onderbouwd met de MCA-methode uit het afwegingskader.</div>
 </div>
 </div>
 </div>
 <div style={{ background: T.accentBg, border: `1px solid ${T.accentBorder}`, borderLeft: `4px solid ${T.accent}`, padding: isMobile ? "16px" : "18px 22px", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 12, flexDirection: isMobile ? "column" : "row" }}>
 <div style={{ textAlign: "center", flex: 1 }}>
-<div style={{ fontWeight: 700, fontSize: 15, color: T.text, fontFamily: "Georgia, serif" }}>Klaar om een platform te beoordelen?</div>
+<div style={{ fontWeight: 700, fontSize: 15, color: T.text, fontFamily: "\"Oranda BT\", \"Oranda\", Georgia, serif" }}>Klaar om een platform te beoordelen?</div>
 <div style={{ fontSize: 13, color: T.textMid, marginTop: 4 }}>Een volledige beoordeling duurt gemiddeld 5–10 minuten.</div>
 </div>
 <button onClick={() => setPage("beoordelen")} style={{ padding: "11px 24px", background: T.accent, color: T.white, border: "none", fontWeight: 700, fontSize: 14, cursor: "pointer", borderRadius: 2, fontFamily: "inherit", width: isMobile ? "100%" : "auto" }}>
@@ -649,10 +652,10 @@ const zwakke = CRITERIA.filter(c => (scores[c.id] || 0) <= 2);
 const stappen = watNuStappen(adv, naam, scores);
 return (
 <div>
-<div style={{ background: T.accent, padding: isMobile ? "20px 16px" : "22px 26px", marginBottom: 20, display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 12, flexDirection: isMobile ? "column" : "row" }}>
+<div style={{ background: "#111111", padding: isMobile ? "20px 16px" : "22px 26px", marginBottom: 20, display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 12, flexDirection: isMobile ? "column" : "row" }}>
 <div style={{ textAlign: "center", flex: 1 }}>
 <div style={{ fontSize: 11, color: "rgba(255,255,255,0.65)", textTransform: "uppercase", letterSpacing: 1.5, fontWeight: 700, marginBottom: 6 }}>Beoordelingsresultaat</div>
-<h1 style={{ margin: 0, fontSize: 22, fontWeight: 900, color: T.white, fontFamily: "Georgia, serif" }}>{naam}</h1>
+<h1 style={{ margin: 0, fontSize: 22, fontWeight: 900, color: T.white, fontFamily: "\"Oranda BT\", \"Oranda\", Georgia, serif" }}>{naam}</h1>
 <div style={{ fontSize: 12, color: "rgba(255,255,255,0.55)", marginTop: 4, fontStyle: "italic" }}>{new Date().toLocaleDateString("nl-NL")}</div>
 </div>
 <button onClick={handleReset} style={{ padding: "9px 18px", background: "rgba(255,255,255,0.15)", border: "1px solid rgba(255,255,255,0.3)", color: T.white, fontWeight: 600, fontSize: 13, cursor: "pointer", borderRadius: 2, fontFamily: "inherit", width: isMobile ? "100%" : "auto" }}>
@@ -665,7 +668,7 @@ return (
 flex: 1, padding: "13px 0", background: step === tab.id ? T.bgCard : T.bgAlt,
 border: "none", fontWeight: step === tab.id ? 700 : 400,
 color: step === tab.id ? T.accent : T.textMid,
-fontSize: 14, cursor: "pointer", fontFamily: "Georgia, serif",
+fontSize: 14, cursor: "pointer", fontFamily: "\"Oranda BT\", \"Oranda\", Georgia, serif",
 borderBottom: step === tab.id ? `3px solid ${T.accent}` : `3px solid transparent`,
 transition: "all 0.12s", textAlign: "center",
 }}>{tab.label}</button>
@@ -725,7 +728,7 @@ transition: "all 0.12s", textAlign: "center",
 </div>
 <div onClick={() => setStep("watnow")} style={{ background: T.accentBg, border: `1px solid ${T.accentBorder}`, borderLeft: `4px solid ${T.accent}`, padding: isMobile ? "16px" : "16px 20px", cursor: "pointer", display: "flex", justifyContent: "space-between", alignItems: "center", gap: 10 }}>
 <div style={{ textAlign: "center", flex: 1 }}>
-<div style={{ fontWeight: 700, fontSize: 15, color: T.text, fontFamily: "Georgia, serif" }}>Wat nu?</div>
+<div style={{ fontWeight: 700, fontSize: 15, color: T.text, fontFamily: "\"Oranda BT\", \"Oranda\", Georgia, serif" }}>Wat nu?</div>
 <div style={{ fontSize: 13, color: T.textMid, marginTop: 4 }}>Bekijk concrete vervolgstappen conform de gemeentelijke communicatiestrategie.</div>
 </div>
 <span style={{ fontSize: 22, color: T.accent }}>→</span>
@@ -737,7 +740,7 @@ transition: "all 0.12s", textAlign: "center",
 <div style={{ background: adv.bg, border: `1px solid ${adv.border}`, padding: "14px 18px", marginBottom: 20, display: "flex", alignItems: "center", gap: 14, justifyContent: "center", flexDirection: isMobile ? "column" : "row" }}>
 <div style={{ width: 12, height: 12, borderRadius: "50%", background: adv.dot, flexShrink: 0 }} />
 <div style={{ textAlign: "center" }}>
-<span style={{ fontWeight: 800, color: adv.textCol, fontFamily: "Georgia, serif", fontSize: 15 }}>{adv.label}</span>
+<span style={{ fontWeight: 800, color: adv.textCol, fontFamily: "\"Oranda BT\", \"Oranda\", Georgia, serif", fontSize: 15 }}>{adv.label}</span>
 <span style={{ color: T.textMid, fontSize: 13, marginLeft: isMobile ? 0 : 10, display: isMobile ? "block" : "inline", marginTop: isMobile ? 4 : 0 }}>{naam} — {totaal}/30 punten</span>
 </div>
 </div>
@@ -747,7 +750,7 @@ transition: "all 0.12s", textAlign: "center",
 <div key={i} style={{ display: "flex", gap: 16, marginBottom: 16, background: T.bgCard, border: `1px solid ${T.border}`, borderLeft: `4px solid ${T.accent}`, padding: "16px 18px", alignItems: "flex-start" }}>
 <div style={{ fontSize: 22, flexShrink: 0, marginTop: 2 }}>{s.icon}</div>
 <div style={{ textAlign: "left" }}>
-<div style={{ fontWeight: 700, fontSize: 14, color: T.text, fontFamily: "Georgia, serif", marginBottom: 6 }}>{i+1}. {s.title}</div>
+<div style={{ fontWeight: 700, fontSize: 14, color: T.text, fontFamily: "\"Oranda BT\", \"Oranda\", Georgia, serif", marginBottom: 6 }}>{i+1}. {s.title}</div>
 <p style={{ margin: 0, fontSize: 13, color: T.textMid, lineHeight: 1.8 }}>{s.body}</p>
 </div>
 </div>
@@ -785,7 +788,7 @@ style={{ width: isMobile ? "100%" : "60%", padding: "10px 12px", border: `1px so
 </div>
 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
 <div style={{ fontSize: 13, color: T.slateLight, fontStyle: "italic" }}>{filled} van 6 criteria ingevuld</div>
-<div style={{ fontSize: 16, fontWeight: 900, color: T.accent, fontFamily: "Georgia, serif" }}>{totaal}/30</div>
+<div style={{ fontSize: 16, fontWeight: 900, color: T.accent, fontFamily: "\"Oranda BT\", \"Oranda\", Georgia, serif" }}>{totaal}/30</div>
 </div>
 <div style={{ height: 3, background: T.bgAlt, marginBottom: 18, overflow: "hidden", borderRadius: 2 }}>
 <div style={{ width: `${(filled/6)*100}%`, height: "100%", background: T.accent, transition: "width 0.3s ease" }} />
@@ -795,7 +798,7 @@ style={{ width: isMobile ? "100%" : "60%", padding: "10px 12px", border: `1px so
 <div onClick={() => setOpen(open === c.id ? null : c.id)}
 style={{ padding: isMobile ? "14px 12px" : "14px 18px", cursor: "pointer", display: "flex", justifyContent: "space-between", alignItems: "center", background: open === c.id ? T.accentBg : T.bgCard, gap: 10 }}>
 <div style={{ display: "flex", alignItems: "center", gap: 12, minWidth: 0 }}>
-<span style={{ fontSize: 10, fontWeight: 800, color: T.accent, minWidth: 28, fontFamily: "Georgia, serif" }}>{c.nr}</span>
+<span style={{ fontSize: 10, fontWeight: 800, color: T.accent, minWidth: 28, fontFamily: "\"Oranda BT\", \"Oranda\", Georgia, serif" }}>{c.nr}</span>
 <div style={{ textAlign: "left", minWidth: 0 }}>
 <div style={{ fontWeight: 600, fontSize: 14, color: T.text }}>{c.title}</div>
 {scores[c.id] && <div style={{ fontSize: 11, color: T.slateLight, marginTop: 2, fontStyle: "italic" }}>Score: {scores[c.id]}/5</div>}
@@ -885,8 +888,8 @@ return (
 <div style={{ border: `1px solid ${T.border}`, overflowX: "auto", overflowY: "hidden", marginBottom: 20, WebkitOverflowScrolling: "touch", borderRadius: 2 }}>
 <table style={{ width: "100%", minWidth: 640, borderCollapse: "collapse" }}>
 <thead>
-<tr style={{ background: T.accent }}>
-<th style={{ padding: "12px 16px", textAlign: "center", fontSize: 12, fontWeight: 700, color: T.white, fontFamily: "Georgia, serif" }}>Platform</th>
+<tr style={{ background: "#111111" }}>
+<th style={{ padding: "12px 16px", textAlign: "center", fontSize: 12, fontWeight: 700, color: T.white, fontFamily: "\"Oranda BT\", \"Oranda\", Georgia, serif" }}>Platform</th>
 {CRITERIA.map(c => <th key={c.id} style={{ padding: "12px 8px", fontSize: 10, fontWeight: 700, color: "rgba(255,255,255,0.8)", textAlign: "center", textTransform: "uppercase", letterSpacing: 0.5 }}>{c.short}</th>)}
 <th style={{ padding: "12px 16px", fontSize: 12, fontWeight: 700, color: T.white, textAlign: "center" }}>Totaal</th>
 <th style={{ padding: "12px 16px", fontSize: 12, fontWeight: 700, color: T.white, textAlign: "center" }}>Advies rapport</th>
@@ -909,7 +912,7 @@ return (
 </td>
 );
 })}
-<td style={{ padding: "12px 16px", textAlign: "center", fontWeight: 900, fontSize: 20, color: adv.dot, fontFamily: "Georgia, serif" }}>{t}</td>
+<td style={{ padding: "12px 16px", textAlign: "center", fontWeight: 900, fontSize: 20, color: adv.dot, fontFamily: "\"Oranda BT\", \"Oranda\", Georgia, serif" }}>{t}</td>
 <td style={{ padding: "12px 12px", textAlign: "center" }}>
 <span style={{ fontSize: 10, fontWeight: 700, padding: "4px 9px", background: adv.bg, color: adv.textCol, border: `1px solid ${adv.border}`, textTransform: "uppercase", letterSpacing: 0.5, whiteSpace: "nowrap" }}>{p.advies}</span>
 </td>
@@ -922,7 +925,7 @@ return (
 {selected ? (
 <div style={{ border: `1px solid ${T.accentBorder}`, borderLeft: `4px solid ${T.accent}` }}>
 <div style={{ background: T.accent, padding: "13px 18px", textAlign: "center" }}>
-<h2 style={{ margin: 0, fontSize: 16, fontWeight: 800, color: T.white, fontFamily: "Georgia, serif" }}>Detail: {selected.naam}</h2>
+<h2 style={{ margin: 0, fontSize: 16, fontWeight: 800, color: T.white, fontFamily: "\"Oranda BT\", \"Oranda\", Georgia, serif" }}>Detail: {selected.naam}</h2>
 </div>
 <div style={{ padding: isMobile ? "16px 12px" : "18px" }}>
 <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: 18 }}>
@@ -1003,7 +1006,7 @@ return (
 {c.voorbeelden.map(v => (
 <div key={v.naam} style={{ border: `1px solid ${T.border}`, padding: "8px 14px", textAlign: "center", minWidth: 85, background: T.bgCard }}>
 <div style={{ fontSize: 11, color: T.slateLight }}>{v.naam}</div>
-<div style={{ fontSize: 20, fontWeight: 900, color: v.score >= 4 ? "#276749" : v.score <= 2 ? "#c53030" : "#b7791f", marginTop: 4, fontFamily: "Georgia, serif" }}>{v.score}</div>
+<div style={{ fontSize: 20, fontWeight: 900, color: v.score >= 4 ? "#276749" : v.score <= 2 ? "#c53030" : "#b7791f", marginTop: 4, fontFamily: "\"Oranda BT\", \"Oranda\", Georgia, serif" }}>{v.score}</div>
 </div>
 ))}
 </div>
@@ -1019,10 +1022,10 @@ return (
 function RapportPage() {
 return (
 <div style={{ maxWidth: 720, margin: "0 auto" }}>
-<div style={{ background: T.accent, padding: "30px 32px", marginBottom: 20, textAlign: "center", position: "relative", overflow: "hidden" }}>
+<div style={{ background: "#111111", padding: "30px 32px", marginBottom: 20, textAlign: "center", position: "relative", overflow: "hidden" }}>
 <div style={{ position: "absolute", right: -40, top: -40, width: 180, height: 180, borderRadius: "50%", background: "rgba(255,255,255,0.05)", pointerEvents: "none" }} />
 <div style={{ fontSize: 11, color: "rgba(255,255,255,0.65)", letterSpacing: 2, textTransform: "uppercase", fontWeight: 700, marginBottom: 12 }}>Voor gemeenten</div>
-<h1 style={{ margin: "0 0 8px", fontSize: 24, fontWeight: 900, color: T.white, fontFamily: "Georgia, serif" }}>Managementsamenvatting</h1>
+<h1 style={{ margin: "0 0 8px", fontSize: 24, fontWeight: 900, color: T.white, fontFamily: "\"Oranda BT\", \"Oranda\", Georgia, serif" }}>Managementsamenvatting</h1>
 <div style={{ color: "rgba(255,255,255,0.7)", fontSize: 13, fontStyle: "italic" }}>Adviesrapport social media — {new Date().getFullYear()}</div>
 </div>
 {[
@@ -1071,10 +1074,10 @@ default: return <HomePage setPage={setPage} />;
 };
 if (isMobile) {
 return (
-<div style={{ display: "flex", flexDirection: "column", minHeight: "100dvh", background: T.bg, fontFamily: "'Segoe UI', 'Helvetica Neue', Arial, sans-serif" }}>
+<div style={{ display: "flex", flexDirection: "column", minHeight: "100dvh", background: T.bg, fontFamily: "'Source Sans 3', 'Source Sans Pro', Arial, sans-serif" }}>
 {showModal && <WelcomeModal onClose={() => setShowModal(false)} />}
-<div style={{ background: T.accent, padding: "12px 16px", display: "flex", alignItems: "center", justifyContent: "space-between", position: "sticky", top: 0, zIndex: 50, flexShrink: 0 }}>
-<div style={{ fontFamily: "Georgia, serif", fontWeight: 900, fontSize: 15, color: T.white, lineHeight: 1.2 }}>
+<div style={{ background: "#111111", padding: "12px 16px", display: "flex", alignItems: "center", justifyContent: "space-between", position: "sticky", top: 0, zIndex: 50, flexShrink: 0 }}>
+<div style={{ fontFamily: "\"Oranda BT\", \"Oranda\", Georgia, serif", fontWeight: 900, fontSize: 15, color: T.white, lineHeight: 1.2 }}>
 Afwegingskader Social Media
 </div>
 <button onClick={() => setShowModal(true)} style={{ fontSize: 12, color: T.white, background: "rgba(255,255,255,0.2)", border: "1px solid rgba(255,255,255,0.3)", padding: "5px 11px", borderRadius: 2, fontWeight: 600 }}>
@@ -1086,7 +1089,7 @@ Afwegingskader Social Media
 </div>
 <nav style={{
 position: "fixed", bottom: 0, left: 0, right: 0, zIndex: 50,
-background: T.accent,
+background: "#111111",
 borderTop: "1px solid rgba(255,255,255,0.15)",
 display: "flex",
 paddingBottom: "env(safe-area-inset-bottom, 0px)",
@@ -1115,11 +1118,20 @@ transition: "all 0.12s",
 );
 }
 return (
-<div style={{ display: "flex", minHeight: "100vh", background: T.bg, fontFamily: "'Segoe UI', 'Helvetica Neue', Arial, sans-serif" }}>
+<div style={{ display: "flex", minHeight: "100vh", background: T.bg, fontFamily: "'Source Sans 3', 'Source Sans Pro', Arial, sans-serif" }}>
 {showModal && <WelcomeModal onClose={() => setShowModal(false)} />}
-<div style={{ width: 252, background: T.accent, flexShrink: 0, display: "flex", flexDirection: "column", position: "sticky", top: 0, height: "100vh", overflow: "auto" }}>
+<div style={{ width: 252, background: "#111111", flexShrink: 0, display: "flex", flexDirection: "column", position: "sticky", top: 0, height: "100vh", overflow: "auto" }}>
 <div style={{ padding: "26px 22px 20px", borderBottom: "1px solid rgba(255,255,255,0.12)", textAlign: "center" }}>
-<div style={{ fontFamily: "Georgia, serif", fontWeight: 900, fontSize: 14, color: T.white, marginBottom: 4, lineHeight: 1.4 }}>
+<div style={{ marginBottom: 16 }}>
+<svg width="80" height="50" viewBox="0 0 80 50" xmlns="http://www.w3.org/2000/svg">
+  <rect x="0" y="0" width="80" height="50" fill="none"/>
+  <rect x="10" y="8" width="60" height="6" fill="#a80a20"/>
+  <rect x="10" y="18" width="60" height="6" fill="#ffffff"/>
+  <rect x="10" y="28" width="60" height="6" fill="#a80a20"/>
+  <text x="40" y="46" textAnchor="middle" fontSize="7" fill="rgba(255,255,255,0.7)" fontFamily="Arial, sans-serif" fontWeight="600">GEMEENTE</text>
+</svg>
+</div>
+<div style={{ fontFamily: "\"Oranda BT\", \"Oranda\", Georgia, serif", fontWeight: 900, fontSize: 14, color: T.white, marginBottom: 4, lineHeight: 1.4 }}>
 Afwegingskader<br />Social Media
 </div>
 <div style={{ width: 28, height: 2, background: "rgba(255,255,255,0.4)", margin: "10px auto" }} />
@@ -1134,7 +1146,7 @@ width: "100%", display: "flex", alignItems: "center", justifyContent: "center",
 padding: "12px 22px",
 background: active ? "rgba(255,255,255,0.15)" : "transparent",
 border: "none",
-borderLeft: `3px solid ${active ? T.white : "transparent"}`,
+borderLeft: `3px solid ${active ? T.accent : "transparent"}`,
 color: active ? T.white : "rgba(255,255,255,0.65)",
 fontWeight: active ? 700 : 400, fontSize: 13, textAlign: "center",
 transition: "all 0.12s",
